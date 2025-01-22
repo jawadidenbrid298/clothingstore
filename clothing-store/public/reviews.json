@@ -1,0 +1,32 @@
+[
+  {
+    "name": "John Doe",
+    "rating": 4,
+    "review": "Great product, really worth the price!"
+  },
+  {
+    "name": "Jane Smith",
+    "rating": 5,
+    "review": "Absolutely love it! Exceeded my expectations."
+  },
+  {
+    "name": "Michael Lee",
+    "rating": 3,
+    "review": "It's okay, but could use some improvements."
+  },
+  {
+    "name": "John Doe",
+    "rating": 4,
+    "review": "Great product, really worth the price!"
+  },
+  {
+    "name": "Jane Smith",
+    "rating": 5,
+    "review": "Absolutely love it! Exceeded my expectations."
+  },
+  {
+    "name": "Michael Lee",
+    "rating": 3,
+    "review": "It's okay, but could use some improvements."
+  }
+]

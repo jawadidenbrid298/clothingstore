@@ -1,0 +1,78 @@
+{
+  "newArrivals": [
+    {
+      "id": 1,
+      "name": "Product 1",
+      "image": "/1.png",
+      "rating": 4.5,
+      "price": 29.99,
+      "sizes": ["Small", "Medium", "Large"],
+      "colors": ["Red", "Green", "Blue"]
+    },
+    {
+      "id": 2,
+      "name": "Product 2",
+      "image": "/2.png",
+      "rating": 4.0,
+      "price": 39.99,
+      "sizes": ["Small", "Medium"],
+      "colors": ["Black", "White"]
+    },
+    {
+      "id": 3,
+      "name": "Product 3",
+      "image": "/3.png",
+      "rating": 5.0,
+      "price": 49.99,
+      "sizes": ["Medium", "Large"],
+      "colors": ["Pink", "Purple"]
+    },
+    {
+      "id": 4,
+      "name": "Product 4",
+      "image": "/4.png",
+      "rating": 3.5,
+      "price": 19.99,
+      "sizes": ["Small", "Medium"],
+      "colors": ["Yellow", "Gray"]
+    }
+  ],
+  "topSelling": [
+    {
+      "id": 5,
+      "name": "Product 5",
+      "image": "/1.png",
+      "rating": 4.8,
+      "price": 59.99,
+      "sizes": ["Medium", "Large"],
+      "colors": ["Green", "Black"]
+    },
+    {
+      "id": 6,
+      "name": "Product 6",
+      "image": "/2.png",
+      "rating": 4.2,
+      "price": 69.99,
+      "sizes": ["Small", "Medium", "Large"],
+      "colors": ["Blue", "White"]
+    },
+    {
+      "id": 7,
+      "name": "Product 7",
+      "image": "/3.png",
+      "rating": 4.7,
+      "price": 79.99,
+      "sizes": ["Medium", "Large"],
+      "colors": ["Red", "Gray"]
+    },
+    {
+      "id": 8,
+      "name": "Product 8",
+      "image": "/4.png",
+      "rating": 4.3,
+      "price": 89.99,
+      "sizes": ["Small", "Large"],
+      "colors": ["Yellow", "Black"]
+    }
+  ]
+}
