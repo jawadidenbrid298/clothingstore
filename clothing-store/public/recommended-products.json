@@ -1,0 +1,118 @@
+{
+  "newArrivals": [
+    {
+      "id": 1,
+      "name": "Product 1",
+      "category": "T-Shirts",
+      "style": "Casual",
+      "image": "/1.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 4.5,
+      "price": 29.99,
+      "newPrice": 24.99,
+      "sizes": ["Small", "Medium", "Large"],
+      "colors": ["Red", "Green", "Blue"],
+      "description": "A perfect casual T-shirt for everyday wear, made from soft, breathable fabric to keep you comfortable all day long."
+    },
+    {
+      "id": 2,
+      "name": "Product 2",
+      "category": "Hoodies",
+      "style": "Gym",
+      "image": "/2.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 4.0,
+      "price": 39.99,
+      "newPrice": 34.99,
+      "sizes": ["Small", "Medium"],
+      "colors": ["Black", "White"],
+      "description": "Stay warm and stylish with this gym-ready hoodie, designed with durable material and a modern fit."
+    },
+    {
+      "id": 3,
+      "name": "Product 3",
+      "category": "Shirts",
+      "style": "Formal",
+      "image": "/3.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 5.0,
+      "price": 49.99,
+      "newPrice": 44.99,
+      "sizes": ["Medium", "Large"],
+      "colors": ["Pink", "Purple"],
+      "description": "Elevate your formal wardrobe with this sleek and stylish shirt, perfect for business meetings and formal occasions."
+    },
+    {
+      "id": 4,
+      "name": "Product 4",
+      "category": "Shorts",
+      "style": "Party",
+      "image": "/4.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 3.5,
+      "price": 19.99,
+      "newPrice": 14.99,
+      "sizes": ["Small", "Medium"],
+      "colors": ["Yellow", "Gray"],
+      "description": "Comfortable and trendy shorts that are perfect for a casual outing or a summer party."
+    }
+  ],
+  "topSelling": [
+    {
+      "id": 5,
+      "name": "Product 5",
+      "category": "T-Shirts",
+      "style": "Gym",
+      "image": "/1.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 4.8,
+      "price": 59.99,
+      "newPrice": 54.99,
+      "sizes": ["Medium", "Large"],
+      "colors": ["Green", "Black"],
+      "description": "Designed for active individuals, this gym T-shirt combines style and functionality for an effortless workout experience."
+    },
+    {
+      "id": 6,
+      "name": "Product 6",
+      "category": "Jeans",
+      "style": "Casual",
+      "image": "/2.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 4.2,
+      "price": 69.99,
+      "newPrice": 64.99,
+      "sizes": ["Small", "Medium", "Large"],
+      "colors": ["Blue", "White"],
+      "description": "Classic and durable jeans with a modern fit, perfect for any casual outing or weekend adventure."
+    },
+    {
+      "id": 7,
+      "name": "Product 7",
+      "category": "Shirts",
+      "style": "Formal",
+      "image": "/3.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 4.7,
+      "price": 79.99,
+      "newPrice": 74.99,
+      "sizes": ["Medium", "Large"],
+      "colors": ["Red", "Gray"],
+      "description": "Make a bold statement at your next formal event with this premium-quality shirt that exudes confidence and style."
+    },
+    {
+      "id": 8,
+      "name": "Product 8",
+      "category": "Hoodies",
+      "style": "Party",
+      "image": "/4.png",
+      "images": ["/product/product1.png", "/product/product2.png", "/product/product3.png"],
+      "rating": 4.3,
+      "price": 89.99,
+      "newPrice": 84.99,
+      "sizes": ["Small", "Large"],
+      "colors": ["Yellow", "Black"],
+      "description": "Party in comfort and style with this cozy hoodie, featuring a bold design and vibrant colors."
+    }
+  ]
+}

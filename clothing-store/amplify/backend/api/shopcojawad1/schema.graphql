@@ -1,0 +1,27 @@
+input AMPLIFY {
+  globalAuthRule: AuthRule = {allow: public}
+} # FOR TESTING ONLY!
+type Productshopcojawad @model {
+  id: ID
+  name: String
+  category: String
+  style: String
+  image: String
+  images: [String]
+  price: Float
+  newPrice: Float
+  sizes: [String]
+  colors: [String]
+  description: String
+  reviews: [Reviewshop] @hasMany(indexName: "byProduct", fields: ["id"]) # One-to-many relationship
+}
+
+type Reviewshop @model {
+  id: ID
+  productID: ID @index(name: "byProduct", sortKeyFields: ["createdAt"])
+  name: String
+  rating: Float
+  comment: String
+  createdAt: String
+  updatedAt: String
+}

@@ -1,0 +1,32 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shopcojawad1-dev-65423-authRole",
+      "UnauthRoleArn": "arn:aws:iam::812096089383:role/amplify-shopcojawad1-dev-65423-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::812096089383:role/amplify-shopcojawad1-dev-65423-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
+      "UnauthRoleName": "amplify-shopcojawad1-dev-65423-unauthRole",
+      "StackName": "amplify-shopcojawad1-dev-65423",
+      "StackId": "arn:aws:cloudformation:ap-south-1:812096089383:stack/amplify-shopcojawad1-dev-65423/a8b1cf70-da0d-11ef-a41a-0a96969c2ec1",
+      "AmplifyAppId": "d3599we6h5su77"
+    },
+    "categories": {
+      "api": {
+        "shopcojawad1": {}
+      },
+      "auth": {
+        "shopcojawad118926806": {}
+      },
+      "function": {
+        "postconfiguration": {
+          "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
+          "s3Key": "amplify-builds/postconfiguration-61376a32502b44457239-build.zip"
+        }
+      },
+      "storage": {
+        "shopcojawad": {}
+      }
+    }
+  }
+}

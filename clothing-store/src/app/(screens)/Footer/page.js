@@ -1,9 +1,15 @@
 'use client';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link'; // Import Link from next/link
-import {Facebook, Instagram, Youtube, Twitter} from 'lucide-react';
+import {Facebook, Instagram, Youtube, Twitter, Mail} from 'lucide-react';
 
 const Footer = () => {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // Set to true after component is mounted on the client
+  }, []);
+
   const footerLinks = {
     company: [
       {name: 'About', href: '#'},
@@ -12,7 +18,7 @@ const Footer = () => {
       {name: 'Career', href: '#'}
     ],
     help: [
-      {name: 'Customer Support', href: '/contact'}, // Link to /contact
+      {name: 'Customer Support', href: '/contact'},
       {name: 'Delivery Details', href: '#'},
       {name: 'Terms & Conditions', href: '#'},
       {name: 'Privacy Policy', href: '#'}
@@ -32,7 +38,38 @@ const Footer = () => {
   };
 
   return (
-    <div className='min-h-screen flex flex-col'>
+    <div className='flex flex-col'>
+      {/* Newsletter Section */}
+      {isClient && (
+        <div className='bg-black rounded-[20px] w-[358px] sm:w-[1300px] sm:h-[177px] h-[293px] justify-center text-white mt-20 py-[22px] sm:pl-[80px] pl-[17px] sm:mx-[100px] mx-[17px]'>
+          <div className='grid md:grid-cols-2 gap-6 w-full'>
+            {/* Grid item for text */}
+            <div className='flex r w-full'>
+              <h2 className='mb-4 sm:text-[40px] text-[32px] leading-[46px] sm:w-full w-[297px] font-ABeeZee'>
+                STAY UP TO DATE ABOUT OUR LATEST OFFERS
+              </h2>
+            </div>
+
+            {/* Grid item for input fields */}
+            <div className='flex flex-col gap-4 w-[1240px] m-auto'>
+              <div className='relative'>
+                <Mail className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5' />
+                <input
+                  type='email'
+                  placeholder='Enter your email address'
+                  className=' pl-10 py-2 text-[16px] leading-[18.91px] rounded-[62px] bg-[#FFFFFF] border w-[340px] border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30'
+                />
+              </div>
+
+              <button className='px-16 py-2 bg-[#FFFFFF] text-[16px] leading-[18.91px] text-black rounded-[62px] font-semibold hover:bg-gray-200 whitespace-nowrap w-[340px]'>
+                Subscribe to Newsletter
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Footer Section */}
       <footer className='bg-white pt-16 pb-8 px-4 md:px-8 mt-auto'>
         <div className='mx-auto'>
           {/* Main Footer Content */}
@@ -71,7 +108,6 @@ const Footer = () => {
                 <ul className='space-y-2'>
                   {footerLinks.help.map((link) => (
                     <li key={link.name}>
-                      {/* Corrected Link usage */}
                       <Link href={link.href} className='text-sm text-gray-600 hover:text-gray-900'>
                         {link.name}
                       </Link>

@@ -1,67 +1,94 @@
 'use client';
 import React, {useEffect, useState} from 'react';
-import Link from 'next/link'; // Import Next.js Link component
-import {useProduct} from '../context/ProductContext'; // Import your ProductContext
+import Link from 'next/link';
+import {useProduct} from '../../context/ProductContext';
+import {generateClient} from '@aws-amplify/api';
+import {listProductshopcojawads} from '../../../graphql/queries';
+import {StorageImage} from '@aws-amplify/ui-react-storage';
 
 const ProductFilterSection = () => {
-  const [products, setProducts] = useState([]); // All products
-  const [filteredProducts, setFilteredProducts] = useState([]); // Filtered products based on user input
-  const [priceRange, setPriceRange] = useState([0.1, 100]); // Initial price range
-  const [selectedColor, setSelectedColor] = useState(''); // Selected color filter
-  const [selectedSize, setSelectedSize] = useState(''); // Selected size filter
-  const {setProduct} = useProduct(); // Get the setProduct function from context
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [priceRange, setPriceRange] = useState([0.1, 100]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
+  const [selectedStyle, setSelectedStyle] = useState('');
+  const {setProduct} = useProduct();
 
   useEffect(() => {
-   
-    fetch('/products.json')
-      .then((response) => response.json())
-      .then((data) => {
-        setProducts(data?.newArrivals || []); // Ensure it's always an array
-        setFilteredProducts(data?.newArrivals || []); // Initialize filtered products
-      })
-      .catch((error) => console.error('Error fetching products:', error));
+    const fetchProducts = async () => {
+      try {
+        const client = generateClient();
+        const result = await client.graphql({
+          query: listProductshopcojawads,
+          variables: {limit: 100}
+        });
+
+        const productData = result.data.listProductshopcojawads.items || [];
+        setProducts(productData);
+        setFilteredProducts(productData);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
-  // Handle price range change
   const handlePriceChange = (event) => {
     const newPriceRange = [...priceRange];
     newPriceRange[event.target.name === 'min' ? 0 : 1] = parseFloat(event.target.value);
     setPriceRange(newPriceRange);
   };
 
-  // Handle color filter change
+  const handleCategoryChange = (category) => {
+    setSelectedCategory(category);
+  };
+
   const handleColorChange = (color) => {
     setSelectedColor(color);
   };
 
-  // Handle size filter change
   const handleSizeChange = (size) => {
     setSelectedSize(size);
   };
 
-  // Apply filters to products
+  const handleStyleChange = (style) => {
+    setSelectedStyle(style);
+  };
+
   const applyFilters = () => {
     let filtered = [...products];
 
-    // Filter by price range
+    // Filter by Category
+    if (selectedCategory) {
+      filtered = filtered.filter((product) => product.category.toLowerCase().includes(selectedCategory.toLowerCase()));
+    }
+
+    // Filter by Price Range
     filtered = filtered.filter((product) => product.price >= priceRange[0] && product.price <= priceRange[1]);
 
-    // Filter by color
+    // Filter by Color
     if (selectedColor) {
       filtered = filtered.filter((product) => product.colors.includes(selectedColor));
     }
 
-    // Filter by size
+    // Filter by Size
     if (selectedSize) {
       filtered = filtered.filter((product) => product.sizes.includes(selectedSize));
+    }
+
+    // Filter by Style
+    if (selectedStyle) {
+      filtered = filtered.filter((product) => product.style.toLowerCase().includes(selectedStyle.toLowerCase()));
     }
 
     setFilteredProducts(filtered);
   };
 
-  // Set selected product in context and navigate to the category page
   const handleProductClick = (product) => {
-    setProduct(product); // Set the selected product in context
+    setProduct(product);
   };
 
   return (
@@ -70,8 +97,25 @@ const ProductFilterSection = () => {
       <div className='w-full md:w-1/4 p-5 border rounded-lg bg-white'>
         <h3 className='text-xl font-semibold mb-4'>Filters</h3>
 
+        {/* Category Filter */}
+        <div className='mb-6'>
+          <h4 className='font-semibold mb-2'>Categories</h4>
+          <div className='flex flex-col gap-2'>
+            {['T-Shirts', 'Shorts', 'Shirts', 'Hoodies', 'Jeans'].map((category) => (
+              <div
+                key={category}
+                onClick={() => handleCategoryChange(category)}
+                className={`p-3 text-left cursor-pointer transform transition-transform duration-200 ${
+                  selectedCategory === category ? 'text-blue-600 font-bold' : 'text-gray-600'
+                } hover:scale-125`}>
+                {category}
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Price Range Filter */}
-        <div className='mb-4'>
+        <div className='mb-6'>
           <label htmlFor='price-range' className='block mb-2 text-sm font-semibold'>
             Price Range
           </label>
@@ -106,7 +150,7 @@ const ProductFilterSection = () => {
         </div>
 
         {/* Color Filter */}
-        <div className='mb-4'>
+        <div className='mb-6'>
           <label className='block mb-2 text-sm font-semibold'>Color</label>
           <div className='flex flex-wrap gap-2'>
             {['Red', 'Green', 'Blue', 'Black', 'White', 'Yellow', 'Pink', 'Purple', 'Gray'].map((color) => (
@@ -120,7 +164,7 @@ const ProductFilterSection = () => {
         </div>
 
         {/* Size Filter */}
-        <div className='mb-4'>
+        <div className='mb-6'>
           <label className='block mb-2 text-sm font-semibold'>Size</label>
           <div className='flex gap-2'>
             {['Small', 'Medium', 'Large'].map((size) => (
@@ -130,6 +174,23 @@ const ProductFilterSection = () => {
                 className={`px-4 py-2 border rounded ${selectedSize === size ? 'bg-blue-600 text-white' : 'bg-white'}`}>
                 {size}
               </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Dress Style Filter */}
+        <div className='mb-6'>
+          <h4 className='font-semibold mb-2'>Select by Dress Style</h4>
+          <div className='flex flex-col gap-2'>
+            {['Casual', 'Party', 'Formal', 'Gym'].map((style) => (
+              <div
+                key={style}
+                onClick={() => handleStyleChange(style)}
+                className={`p-3 text-left cursor-pointer transform transition-transform duration-200 ${
+                  selectedStyle === style ? 'text-blue-600 font-bold' : 'text-gray-600'
+                } hover:scale-125`}>
+                {style}
+              </div>
             ))}
           </div>
         </div>
@@ -145,10 +206,15 @@ const ProductFilterSection = () => {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
-              <div key={product.id} className='card bg-white p-5 rounded-lg shadow-md'>
-                <Link href='/category' onClick={() => handleProductClick(product)}>
-                  <img src={product.image} alt={product.name} className='w-full h-48 object-cover mb-4' />
-                  <h4 className='font-semibold text-lg'>{product.name}</h4>
+              <div key={product.id} className='card bg-none p-5 rounded-lg'>
+                {/* Updated Link with Product ID */}
+                <Link href={`/category?id=${product.id}`} onClick={() => handleProductClick(product)}>
+                  <StorageImage
+                    className='w-[295px] h-[298px] object-cover rounded-md mb-4'
+                    imgKey={product.images[0] || 'products/1737718292964_1.png'}
+                    alt={product.name}
+                  />
+                  <h4 className='font-semibold sm:leading-[23.64px] sm:text-[20px] text-lg'>{product.name}</h4>
                   <p className='text-gray-600 mb-4'>
                     {product.colors.join(', ')} - {product.sizes.join(', ')}
                   </p>

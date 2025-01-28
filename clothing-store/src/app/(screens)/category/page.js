@@ -1,45 +1,129 @@
 'use client';
+
 import React, {useState, useEffect} from 'react';
-import {useProduct} from '@/app/context/ProductContext'; // Import Product Context
-import {useCart} from '@/context/cartcontext/page'; // Import Cart Context
-import {useRouter} from 'next/navigation'; // Import useRouter for navigation
+import {useCart} from '@/context/cartcontext/page';
 import {FaStar} from 'react-icons/fa';
+import {StorageImage} from '@aws-amplify/ui-react-storage';
+import {useSearchParams} from 'next/navigation';
+import {getProductshopcojawad} from '../../../graphql/queries';
+import {listReviewshops} from '../../../graphql/queries'; // Query to list reviews
+import {generateClient} from '@aws-amplify/api';
+import CreateReview from '../productreview/page'; // Import the CreateReview component
+import ProtectedRoute from '@/app/Protectedroute';
+import {ABeeZee} from '@next/font/google';
+
+const abeezee = ABeeZee({
+  subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
+  display: 'swap'
+});
 
 const CategoryPage = () => {
-  const {product} = useProduct(); // Get the product from context
-  const {addToCart} = useCart(); // Get addToCart function from Cart Context
-  const [reviews, setReviews] = useState([]);
-  const [faqs, setFaqs] = useState([]);
+  const {addToCart} = useCart();
   const [selectedSize, setSelectedSize] = useState('Medium');
+  const [faqs, setFaqs] = useState([]);
   const [selectedColor, setSelectedColor] = useState('Green');
+  const [activeSection, setActiveSection] = useState('details');
+  const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [activeSection, setActiveSection] = useState('details'); // Track which section is active
-  const router = useRouter(); // Initialize the router
+  const [productDetails, setProductDetails] = useState(null);
+  const [averageRating, setAverageRating] = useState(0);
+  const [reviews, setReviews] = useState([]); // State for reviews
+  const searchParams = useSearchParams();
+  const productId = searchParams.get('id');
 
-  // Fetch reviews from reviews.json
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        setLoading(true);
-        setError(null); // Reset error state
-        const reviewsResponse = await fetch('/reviews.json');
-        const reviewsData = await reviewsResponse.json();
-        console.log('reviews', reviewsData);
-        setReviews(reviewsData); // Fetch all reviews
-      } catch (error) {
-        setError('Error fetching reviews');
-        console.error('Error fetching reviews:', error);
-      } finally {
-        setLoading(false);
+    const fetchProductDetails = async () => {
+      if (productId) {
+        try {
+          setLoading(true);
+          setError(null);
+
+          const api = generateClient();
+          const response = await api.graphql({
+            query: getProductshopcojawad,
+            variables: {id: productId}
+          });
+
+          setProductDetails(response.data.getProductshopcojawad);
+        } catch (err) {
+          setError('Product not found');
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
       }
     };
 
-    fetchReviews();
-  }, [product]);
+    const fetchReviews = async () => {
+      if (productId) {
+        try {
+          const api = generateClient();
+          const response = await api.graphql({
+            query: listReviewshops,
+            variables: {filter: {productID: {eq: productId}}} // Fetch reviews for the specific product
+          });
 
-  // Fetch FAQs (static for this example)
+          const reviews = response.data.listReviewshops.items;
+          setReviews(reviews);
+
+          // Calculate the average rating
+          if (reviews.length > 0) {
+            const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+            const averageRating = totalRating / reviews.length;
+            console.log('Average Rating:', averageRating);
+            // Optionally set it in state if needed
+            setAverageRating(averageRating);
+          } else {
+            console.log('No reviews found for this product.');
+            // Optionally reset average rating
+            setAverageRating(0);
+          }
+        } catch (err) {
+          console.error('Error fetching reviews:', err);
+        }
+      }
+    };
+
+    fetchProductDetails();
+    fetchReviews();
+  }, [productId]);
+
+  const handleAddToCart = () => {
+    if (!productDetails) {
+      alert('Product details not available!');
+      return;
+    }
+
+    // Check if a size and color are selected
+    if (!selectedSize || !selectedColor) {
+      alert('Please select a size and color!');
+      return;
+    }
+
+    // Prepare the cart item data with selected values
+    const cartItems = {
+      id: productDetails.id,
+      name: productDetails.name,
+      price: productDetails.price,
+      newPrice: productDetails.newPrice,
+      selectedSize, // Dynamically using the selected size
+      selectedColor, // Dynamically using the selected color
+      image: selectedImage || productDetails.images[0] || 'default-image.jpg', // Using the selected image, default to first image
+      quantity: 1 // Default to 1 for now, you can make this dynamic as needed
+    };
+
+    // Verify cart item data
+    addToCart(cartItems); // Call the addToCart function from the context
+
+    alert('Product added to cart');
+    window.location.href = '/cart'; // Redirect to cart
+  };
+
   useEffect(() => {
+    // Predefined FAQs
     setFaqs([
       {question: 'What is the return policy?', answer: 'You can return the product within 30 days.'},
       {question: 'How do I track my order?', answer: 'You can track your order via our tracking page.'},
@@ -47,69 +131,88 @@ const CategoryPage = () => {
     ]);
   }, []);
 
-  // Store selected size and color in localStorage
-  useEffect(() => {
-    localStorage.setItem('selectedSize', selectedSize);
-    localStorage.setItem('selectedColor', selectedColor);
-  }, [selectedSize, selectedColor]);
-
-  // Add to Cart: Use the addToCart function from Cart Context
-  const handleAddToCart = () => {
-    const cartItem = {
-      ...product,
-      selectedSize,
-      selectedColor
-    };
-    addToCart(cartItem);
-    alert('Product added to cart');
-    router.push('/cart'); // Redirect to the cart page
+  const handleNewReview = async () => {
+    // Refresh reviews after a new review is submitted
+    try {
+      const api = generateClient();
+      const response = await api.graphql({
+        query: listReviewshops,
+        variables: {filter: {productID: {eq: productId}}}
+      });
+      console.log('response', response);
+      setReviews(response.data.listReviewshops.items);
+    } catch (err) {
+      console.error('Error refreshing reviews:', err);
+    }
   };
 
-  if (!product) return <div>Product not found</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error || !productDetails) return <div>{error || 'Product not found'}</div>;
 
   return (
-    <div className='py-8 bg-gray-50'>
+    <div className={`py-8 bg-gray-50 ${abeezee.className} `}>
       <div className='container mx-auto px-4'>
-        {/* Product Image and Details */}
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-          <div className='flex flex-col items-center'>
-            <div className='flex space-x-4'>
-              {/* Displaying the first 3 images */}
-              {product.images?.slice(0, 3).map((img, index) => (
-                <img
+          <div className='flex lg:flex-row flex-col-reverse lg:space-x-4'>
+            {/* Handle Image Previews */}
+            <div className='flex lg:flex-col mt-3 sm:mt-0 lg:space-y-4 lg:mr-4 space-x-4 lg:space-x-0'>
+              {(productDetails.images?.length > 1
+                ? productDetails.images.slice(1, 4)
+                : [productDetails.images[0] || 'default-image.jpg']
+              ).map((img, index) => (
+                <StorageImage
                   key={index}
-                  src={product.img}
-                  alt={`Product image ${index + 1}`}
-                  className='w-24 h-24 object-cover rounded-md'
+                  className={`lg:w-[152px] lg:h-[167px] w-[111px] h-[106px] object-cover rounded-[20px] cursor-pointer ${
+                    selectedImage === img ? 'border-[1px] border-black' : ''
+                  }`}
+                  imgKey={img}
+                  onClick={() => setSelectedImage(img)} // Set the selected image on click
                 />
               ))}
             </div>
-            {/* Main Large Image */}
-            <img
-              src={product.image}
-              alt='Large product image'
-              className='mt-4 w-[358px] h-[290px] sm:w-[444px] sm:h-[530px] lg:w-[400px] object-cover rounded-md'
+
+            {/* Large Image */}
+            <StorageImage
+              className='w-[444px] h-[530px] object-cover bg-transparent border rounded-[20px]'
+              imgKey={selectedImage || productDetails.images[0] || 'default-image.jpg'}
             />
           </div>
 
-          {/* Product Details */}
           <div>
-            <h2 className='text-2xl font-semibold text-gray-800'>{product.name}</h2>
-            <p className='text-lg font-medium text-gray-600 mt-2'>{product.description}</p>
-            <div className='flex items-center mt-4'>
-              <span className='text-xl font-semibold text-gray-800'>${product.price}</span>
-              <span className='text-sm text-gray-500 ml-4 line-through'>${product.originalPrice}</span>
+            <h2 className='font-semibold text-gray-800 text-[24px] sm:text-[40px]'>{productDetails.name}</h2>
+
+            <div className='flex items-center mb-[14px] sm:mb-[12px] mt-[12px] sm:mt-[14px]'>
+              <div className='text-yellow-400 sm:gap-[7.1px]'>
+                {Array.from({length: 5}, (_, i) => (
+                  <FaStar key={i} className={i < averageRating ? 'inline' : 'inline text-gray-300'} />
+                ))}
+              </div>
+              <span className='sm:w-[41px] sm:h[19px] text-normal sm:text-[16px] sm:leading-[18.91px] ml-2 text-gray-600'>
+                ({averageRating}/5)
+              </span>
             </div>
 
-            {/* Size Selection */}
+            <div className='flex sm:w-[77px] sm:h-[38px] items-center mb-[14px] sm:mb-[12px]'>
+              <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] font-semibold text-gray-800'>
+                ${productDetails.price}
+              </span>
+              <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] text-gray-400 ml-4 line-through'>
+                ${productDetails.newPrice}
+              </span>
+            </div>
+
+            <p className='pt-[23px] sm:pt[28px] w-full leading-[20px] sm:text-[16px] text-[14px] sm:leading-[22px] font-medium text-[#00000099] mb-[25px] sm:mb-[23px]'>
+              {productDetails.description}
+            </p>
+
             <div className='mt-4'>
-              <h3 className='text-gray-700'>Choose Size</h3>
-              <div className='flex space-x-4 mt-2'>
-                {product.sizes?.map((size) => (
+              <h4 className='font-semibold text-gray-800 mb-2'>Sizes:</h4>
+              <div className='flex space-x-4'>
+                {productDetails.sizes?.map((size, index) => (
                   <button
-                    key={size}
+                    key={index}
                     className={`px-4 py-2 border rounded-lg ${
-                      selectedSize === size ? 'bg-blue-500 text-white' : 'bg-white text-gray-700'
+                      size === selectedSize ? 'bg-black text-white' : 'bg-gray-200'
                     }`}
                     onClick={() => setSelectedSize(size)}>
                     {size}
@@ -118,16 +221,13 @@ const CategoryPage = () => {
               </div>
             </div>
 
-            {/* Color Selection */}
             <div className='mt-4'>
-              <h3 className='text-gray-700'>Select Color</h3>
-              <div className='flex space-x-4 mt-2'>
-                {product.colors?.map((color) => (
+              <h4 className='font-semibold text-gray-800 mb-2'>Colors:</h4>
+              <div className='flex space-x-4'>
+                {productDetails.colors?.map((color, index) => (
                   <button
-                    key={color}
-                    className={`w-8 h-8 rounded-full border ${
-                      selectedColor === color ? 'border-blue-500' : 'border-gray-300'
-                    }`}
+                    key={index}
+                    className={`w-8 h-8 rounded-full ${color === selectedColor ? 'border-2 border-black' : ''}`}
                     style={{backgroundColor: color}}
                     onClick={() => setSelectedColor(color)}
                   />
@@ -135,15 +235,16 @@ const CategoryPage = () => {
               </div>
             </div>
 
-            {/* Add to Cart Button */}
-            <button className='mt-6 px-6 py-3 bg-blue-500 text-white rounded-lg' onClick={handleAddToCart}>
+            <button
+              className='mt-[51px] sm:mt-[50px] px-6 py-3 bg-black sm:text-[16px] text-white rounded-lg'
+              onClick={handleAddToCart}>
               Add to Cart
             </button>
           </div>
         </div>
 
-        {/* Navigation Links for Sections (Centered with Bar that Moves with Click) */}
-        <div className='relative flex justify-center space-x-10 mb-8 pt-10 mt-[50px] sm:mt-[80px] pb-[21px] sm:pb-[24px]'>
+        {/* Navigation Links for Sections */}
+        <div className='relative flex justify-center space-x-10 mb-8 pt-10 mt-10 pb-6'>
           <div className='absolute bottom-0 left-0 w-full h-1 bg-gray-300'></div>
           <button
             onClick={() => setActiveSection('details')}
@@ -168,18 +269,19 @@ const CategoryPage = () => {
             {activeSection === 'reviews' && <div className='absolute bottom-0 left-0 w-full h-1 bg-black'></div>}
           </button>
         </div>
+        <div className='pt-[20px] float-right'>
+          <CreateReview productID={productId} onReviewSubmit={handleNewReview} />
+        </div>
 
-        {/* Product Details Section */}
+        {/* Sections: Details, FAQs, Reviews */}
         {activeSection === 'details' && (
           <div className='mt-12'>
             <h3 className='text-2xl font-semibold mb-4'>Product Details</h3>
-            <p>{product.details}</p>
+            <p>{productDetails.details}</p>
           </div>
         )}
-
-        {/* FAQs Section */}
         {activeSection === 'faqs' && (
-          <div className='mt-12'>
+          <div className='mt-12 pt-[24px]'>
             <h3 className='text-2xl font-semibold mb-4'>Frequently Asked Questions</h3>
             <div className='space-y-4'>
               {faqs.map((faq, index) => (
@@ -191,10 +293,8 @@ const CategoryPage = () => {
             </div>
           </div>
         )}
-
-        {/* Reviews Section */}
         {activeSection === 'reviews' && (
-          <div className='mt-12'>
+          <div className='mt-12 pt-[24px]'>
             <h3 className='text-2xl font-semibold mb-4'>Customer Reviews</h3>
             {loading ? (
               <p>Loading reviews...</p>
@@ -209,13 +309,13 @@ const CategoryPage = () => {
                         <FaStar key={i} className={i < review.rating ? 'inline' : 'inline text-gray-300'} />
                       ))}
                     </div>
-                    <h3 className='text-lg font-bold'>{review.name}</h3>
-                    <p className='text-gray-600 mt-2'>{review.review}</p>
+                    <h4 className='text-lg font-semibold'>{review.name}</h4>
+                    <p>{review.comment}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p>No reviews available for this product.</p>
+              <p>No reviews yet</p>
             )}
           </div>
         )}

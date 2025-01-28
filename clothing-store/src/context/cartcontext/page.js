@@ -1,5 +1,5 @@
 'use client';
-import {createContext, useContext, useState} from 'react';
+import {createContext, useContext, useState, useEffect} from 'react';
 
 // Create Cart Context
 const CartContext = createContext();
@@ -8,6 +8,21 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({children}) => {
   const [cartItems, setCartItems] = useState([]);
+
+  // Load cart items from localStorage on initial load
+  useEffect(() => {
+    const storedCartItems = JSON.parse(localStorage.getItem('cartItems'));
+    if (storedCartItems) {
+      setCartItems(storedCartItems);
+    }
+  }, []);
+
+  // Save cart items to localStorage whenever cart changes
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
 
   // Add item to cart
   const addToCart = (newItem) => {
@@ -32,6 +47,7 @@ export const CartProvider = ({children}) => {
   // Clear cart
   const clearCart = () => {
     setCartItems([]);
+    localStorage.removeItem('cartItems'); // Clear cart from localStorage
   };
 
   return (

@@ -1,5 +1,6 @@
 'use client';
 import React, {useState, useEffect} from 'react';
+import {updatePassword} from 'aws-amplify/auth';
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -25,12 +26,31 @@ const Profile = () => {
     setFormData({...formData, [name]: value});
   };
 
-  const handleSubmit = (e) => {
+  const handleUpdatePassword = async (oldPassword, newPassword) => {
+    try {
+      await updatePassword({oldPassword, newPassword});
+      console.log('Password updated successfully');
+      alert('Password updated successfully!');
+    } catch (err) {
+      console.log('Error updating password:', err);
+      alert('Failed to update password');
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     // Save the form data to localStorage
     localStorage.setItem('profileData', JSON.stringify(formData));
     console.log('Form Submitted and Saved:', formData);
     alert('Profile information saved successfully!');
+
+    // Handle password change if new passwords match
+    if (formData.newPassword && formData.newPassword === formData.confirmPassword) {
+      await handleUpdatePassword(formData.currentPassword, formData.newPassword);
+    } else {
+      alert('New passwords do not match');
+    }
   };
 
   return (
