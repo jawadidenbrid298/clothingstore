@@ -1,6 +1,14 @@
 input AMPLIFY {
   globalAuthRule: AuthRule = {allow: public}
 } # FOR TESTING ONLY!
+type Usershopjawad @model {
+  id: ID
+  description: String
+  name: String
+  email: String
+  createdAt: String
+  updatedAt: String
+}
 type Productshopcojawad @model {
   id: ID
   name: String
@@ -9,6 +17,7 @@ type Productshopcojawad @model {
   image: String
   images: [String]
   price: Float
+  discount: Float
   newPrice: Float
   sizes: [String]
   colors: [String]
@@ -24,4 +33,13 @@ type Reviewshop @model {
   comment: String
   createdAt: String
   updatedAt: String
+}
+
+type ProductRating {
+  productID: ID!
+  averageRating: Float!
+}
+
+type Query {
+  Toprated: [ProductRating] @function(name: "topratedproducts-dev")
 }

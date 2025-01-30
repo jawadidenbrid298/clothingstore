@@ -12,8 +12,11 @@ const ProductModal = () => {
     category: '',
     name: '',
     price: '',
+    newPrice: '',
     sizes: '',
+    discount: '',
     colors: '',
+    description: '',
     images: []
   });
 
@@ -24,7 +27,18 @@ const ProductModal = () => {
   // Handle input changes
   const handleChange = (e) => {
     const {name, value} = e.target;
-    setProductData({...productData, [name]: value});
+    const newData = {...productData, [name]: value};
+
+    // Calculate new price when discount percentage is updated
+    if (name === 'discountPercentage' && newData.discountPercentage && productData.price) {
+      const discountPercentage = parseFloat(newData.discountPercentage);
+      const originalPrice = parseFloat(productData.price);
+      const newPrice = originalPrice - originalPrice * (discountPercentage / 100);
+
+      newData.newPrice = newPrice.toFixed(2); // Save the new price with 2 decimal places
+    }
+
+    setProductData(newData);
   };
 
   // Handle file selection
@@ -71,10 +85,19 @@ const ProductModal = () => {
     }
     return uploadedKeys;
   };
+  const calculateNewPrice = (price, percentage) => {
+    if (!percentage) return price; // If no percentage, return the original price
+    const discount = (price * percentage) / 100;
+    return price - discount;
+  };
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Calculate the new price based on the discount percentage
+    const discount = parseFloat(productData.discountPercentage) || 0;
+    const newPrice = calculateNewPrice(parseFloat(productData.price), discount);
 
     // Upload images and get their keys
     const uploadedImageKeys = await uploadImages(productData.images);
@@ -83,11 +106,18 @@ const ProductModal = () => {
     const newProduct = {
       name: productData.name,
       category: productData.category,
-      price: parseFloat(productData.price),
+      newPrice: parseFloat(newPrice), // Store only newPrice
+      discount: discount,
       sizes: productData.sizes.split(',').map((size) => size.trim()),
       colors: productData.colors.split(',').map((color) => color.trim()),
+      description: productData.description,
       images: uploadedImageKeys
     };
+
+    // Only add `price` if discount is greater than 0
+    if (discount > 0) {
+      newProduct.price = parseFloat(productData.price);
+    }
 
     try {
       const client = generateClient(); // Initialize the client
@@ -102,8 +132,11 @@ const ProductModal = () => {
           category: '',
           name: '',
           price: '',
+          newPrice: '',
+          discount: '',
           sizes: '',
           colors: '',
+          description: '',
           images: []
         });
         setImagePreviews([]);
@@ -125,7 +158,7 @@ const ProductModal = () => {
   return (
     modalVisible && (
       <ProtectedRoute>
-        <div className='fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center' onClick={handleClose}>
+        <div className='inset-0 bg-gray-800 z-60 bg-opacity-50 flex justify-center items-center' onClick={handleClose}>
           <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-md'>
             <h2 className='text-2xl font-bold mb-4'>Add New Product</h2>
             <form onSubmit={handleSubmit}>
@@ -180,6 +213,36 @@ const ProductModal = () => {
                   required
                 />
               </div>
+              <div className='mb-4'>
+                <label htmlFor='discountPercentage' className='block text-sm font-medium text-gray-700'>
+                  Discount Percentage
+                </label>
+                <input
+                  type='number'
+                  id='discount'
+                  name='discountPercentage'
+                  value={productData.discountPercentage || ''}
+                  onChange={handleChange}
+                  className='w-full mt-1 p-2 border rounded-md'
+                  placeholder='e.g., 50'
+                />
+              </div>
+
+              {/* Display New Price after Calculation */}
+              <div className='mb-4'>
+                <label htmlFor='newPrice' className='block text-sm font-medium text-gray-700'>
+                  New Price (calculated)
+                </label>
+                <input
+                  type='number'
+                  id='newPrice'
+                  name='newPrice'
+                  value={productData.newPrice}
+                  readOnly
+                  className='w-full mt-1 p-2 border rounded-md'
+                  placeholder='e.g., 10'
+                />
+              </div>
 
               {/* Sizes */}
               <div className='mb-4'>
@@ -211,6 +274,23 @@ const ProductModal = () => {
                   onChange={handleChange}
                   className='w-full mt-1 p-2 border rounded-md'
                   placeholder='e.g., Red, Blue, Green'
+                  required
+                />
+              </div>
+
+              {/* Description */}
+              <div className='mb-4'>
+                <label htmlFor='description' className='block text-sm font-medium text-gray-700'>
+                  Description
+                </label>
+                <textarea
+                  id='description'
+                  name='description'
+                  value={productData.description}
+                  onChange={handleChange}
+                  className='w-full mt-1 p-2 border rounded-md'
+                  rows='4'
+                  placeholder='Enter product description'
                   required
                 />
               </div>

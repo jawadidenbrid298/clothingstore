@@ -1,6 +1,51 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateUsershopjawad = /* GraphQL */ `
+  subscription OnCreateUsershopjawad(
+    $filter: ModelSubscriptionUsershopjawadFilterInput
+  ) {
+    onCreateUsershopjawad(filter: $filter) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateUsershopjawad = /* GraphQL */ `
+  subscription OnUpdateUsershopjawad(
+    $filter: ModelSubscriptionUsershopjawadFilterInput
+  ) {
+    onUpdateUsershopjawad(filter: $filter) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteUsershopjawad = /* GraphQL */ `
+  subscription OnDeleteUsershopjawad(
+    $filter: ModelSubscriptionUsershopjawadFilterInput
+  ) {
+    onDeleteUsershopjawad(filter: $filter) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
 export const onCreateProductshopcojawad = /* GraphQL */ `
   subscription OnCreateProductshopcojawad(
     $filter: ModelSubscriptionProductshopcojawadFilterInput
@@ -13,6 +58,7 @@ export const onCreateProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors
@@ -49,6 +95,7 @@ export const onUpdateProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors
@@ -85,6 +132,7 @@ export const onDeleteProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors

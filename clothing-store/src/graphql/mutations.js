@@ -1,6 +1,54 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const createUsershopjawad = /* GraphQL */ `
+  mutation CreateUsershopjawad(
+    $input: CreateUsershopjawadInput!
+    $condition: ModelUsershopjawadConditionInput
+  ) {
+    createUsershopjawad(input: $input, condition: $condition) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUsershopjawad = /* GraphQL */ `
+  mutation UpdateUsershopjawad(
+    $input: UpdateUsershopjawadInput!
+    $condition: ModelUsershopjawadConditionInput
+  ) {
+    updateUsershopjawad(input: $input, condition: $condition) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteUsershopjawad = /* GraphQL */ `
+  mutation DeleteUsershopjawad(
+    $input: DeleteUsershopjawadInput!
+    $condition: ModelUsershopjawadConditionInput
+  ) {
+    deleteUsershopjawad(input: $input, condition: $condition) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
 export const createProductshopcojawad = /* GraphQL */ `
   mutation CreateProductshopcojawad(
     $input: CreateProductshopcojawadInput!
@@ -14,6 +62,7 @@ export const createProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors
@@ -51,6 +100,7 @@ export const updateProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors
@@ -88,6 +138,7 @@ export const deleteProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors

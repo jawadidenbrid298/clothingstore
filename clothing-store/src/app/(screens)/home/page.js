@@ -19,7 +19,7 @@ export default function HeroSection() {
         {/* Left Section: Text and Button */}
         <div className='w-full pt-[199px] sm:pt-[103px] pl-4 sm:pl-[100px]'>
           {/* Header Text */}
-          <h1 className='text-black font-normal   text-[36px] sm:text-[64px] break-words w-[315px] h-[93px] sm:w-[577px] sm:h-[173px] leading-[34px] sm:leading-[64px] text-left'>
+          <h1 className='text-black font-normal text-[36px] lg:text-[64px] sm:text-[44px] break-words lg:w-full lg:h-full max-w-[577px] max-h-[173px] sm:w-full sm:h-full leading-[34px] sm:leading-[64px] text-left z-1'>
             FIND CLOTHES THAT MATCHES YOUR STYLE
           </h1>
 
@@ -61,10 +61,34 @@ export default function HeroSection() {
         {/* Right Section: Image */}
         <div className='w-full flex justify-center'>
           <img
-            className='max-w-[390px] max-h-[448px] sm:max-w-[577px] sm:max-h-[680px] object-cover object-top'
+            className='max-w-[390px] max-h-[448px] sm:max-w-[577px] sm:max-h-[750px] object-cover object-top'
             src='/file.jpg'
             alt='Hero Image'
           />
+          <svg
+            className='sm:absolute relative sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
+            width='104'
+            height='104'
+            viewBox='0 0 104 104'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'>
+            <path
+              d='M52 0C53.7654 27.955 76.0448 50.2347 104 52C76.0448 53.7654 53.7654 76.0448 52 104C50.2347 76.0448 27.955 53.7654 0 52C27.955 50.2347 50.2347 27.955 52 0Z'
+              fill='black'
+            />
+          </svg>
+          <svg
+            className='absolute right-[800px] top-3/4 transform -translate-y-1/2 '
+            width='104'
+            height='104'
+            viewBox='0 0 104 104'
+            fill='none'
+            xmlns='http://www.w3.org/2000/svg'>
+            <path
+              d='M52 0C53.7654 27.955 76.0448 50.2347 104 52C76.0448 53.7654 53.7654 76.0448 52 104C50.2347 76.0448 27.955 53.7654 0 52C27.955 50.2347 50.2347 27.955 52 0Z'
+              fill='black'
+            />
+          </svg>
         </div>
       </div>
 

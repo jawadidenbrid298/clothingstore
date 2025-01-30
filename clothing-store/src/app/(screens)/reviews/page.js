@@ -15,7 +15,7 @@ const ReviewCarousel = () => {
 
   const handleScroll = (direction) => {
     if (carouselRef.current) {
-      const scrollAmount = 300; // Adjust scroll distance
+      const scrollAmount = 300;
       carouselRef.current.scrollBy({
         left: direction === 'prev' ? -scrollAmount : scrollAmount,
         behavior: 'smooth'
@@ -26,7 +26,7 @@ const ReviewCarousel = () => {
   if (reviews.length === 0) return <div>Loading...</div>;
 
   return (
-    <div className='relative w-full mx-auto py-20 px-8 sm:px-16 lg:px-24'>
+    <div className='w-full mx-auto py-20 px-8 sm:px-16 lg:px-24'>
       {/* Heading */}
       <h2 className='text-left text-3xl font-bold mb-6'>OUR HAPPY CUSTOMERS</h2>
 
@@ -44,7 +44,7 @@ const ReviewCarousel = () => {
           </svg>
         </button>
 
-        {/* Right Arrow */}
+       
         <button
           onClick={() => handleScroll('next')}
           className='flex items-center justify-center w-10 h-10  hover:bg-gray-300 rounded-full transition'>
@@ -70,7 +70,7 @@ const ReviewCarousel = () => {
               {Array(review.rating)
                 .fill(null)
                 .map((_, i) => (
-                  <span key={i}>&#9733;</span> // Star icon
+                  <span key={i}>&#9733;</span> 
                 ))}
             </div>
             {/* Reviewer Name */}

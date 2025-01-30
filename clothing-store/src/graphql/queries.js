@@ -1,6 +1,49 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const Toprated = /* GraphQL */ `
+  query Toprated {
+    Toprated {
+      productID
+      averageRating
+      __typename
+    }
+  }
+`;
+export const getUsershopjawad = /* GraphQL */ `
+  query GetUsershopjawad($id: ID!) {
+    getUsershopjawad(id: $id) {
+      id
+      description
+      name
+      email
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const listUsershopjawads = /* GraphQL */ `
+  query ListUsershopjawads(
+    $filter: ModelUsershopjawadFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsershopjawads(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        description
+        name
+        email
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+  }
+`;
 export const getProductshopcojawad = /* GraphQL */ `
   query GetProductshopcojawad($id: ID!) {
     getProductshopcojawad(id: $id) {
@@ -11,6 +54,7 @@ export const getProductshopcojawad = /* GraphQL */ `
       image
       images
       price
+      discount
       newPrice
       sizes
       colors
@@ -54,6 +98,7 @@ export const listProductshopcojawads = /* GraphQL */ `
         image
         images
         price
+        discount
         newPrice
         sizes
         colors

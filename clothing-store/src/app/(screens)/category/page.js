@@ -11,6 +11,8 @@ import {generateClient} from '@aws-amplify/api';
 import CreateReview from '../productreview/page'; // Import the CreateReview component
 import ProtectedRoute from '@/app/Protectedroute';
 import {ABeeZee} from '@next/font/google';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -20,8 +22,9 @@ const abeezee = ABeeZee({
 });
 
 const CategoryPage = () => {
-  const {addToCart} = useCart();
+  const {addToCart, cartItems, updateCartItemQuantity} = useCart();
   const [selectedSize, setSelectedSize] = useState('Medium');
+  const [quantity, setQuantity] = useState(1);
   const [faqs, setFaqs] = useState([]);
   const [selectedColor, setSelectedColor] = useState('Green');
   const [activeSection, setActiveSection] = useState('details');
@@ -33,6 +36,10 @@ const CategoryPage = () => {
   const [reviews, setReviews] = useState([]); // State for reviews
   const searchParams = useSearchParams();
   const productId = searchParams.get('id');
+
+  useEffect(() => {
+    console.log(cartItems); // Log to check cartItems
+  }, [cartItems]);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -55,6 +62,15 @@ const CategoryPage = () => {
           setLoading(false);
         }
       }
+    };
+    const updateCartItemQuantity = (itemId, newQuantity) => {
+      setCartItems((prevItems) =>
+        prevItems.map((item) =>
+          item.id === itemId
+            ? {...item, quantity: Math.max(newQuantity, 1)} // Ensure quantity doesn't go below 1
+            : item
+        )
+      );
     };
 
     const fetchReviews = async () => {
@@ -97,29 +113,25 @@ const CategoryPage = () => {
       return;
     }
 
-    // Check if a size and color are selected
     if (!selectedSize || !selectedColor) {
       alert('Please select a size and color!');
       return;
     }
 
-    // Prepare the cart item data with selected values
-    const cartItems = {
+    const cartItem = {
       id: productDetails.id,
       name: productDetails.name,
       price: productDetails.price,
       newPrice: productDetails.newPrice,
-      selectedSize, // Dynamically using the selected size
-      selectedColor, // Dynamically using the selected color
-      image: selectedImage || productDetails.images[0] || 'default-image.jpg', // Using the selected image, default to first image
-      quantity: 1 // Default to 1 for now, you can make this dynamic as needed
+      selectedSize,
+      selectedColor,
+      image: productDetails.images?.[0] || 'default-image.jpg',
+      quantity
     };
 
-    // Verify cart item data
-    addToCart(cartItems); // Call the addToCart function from the context
-
+    addToCart(cartItem);
     alert('Product added to cart');
-    window.location.href = '/cart'; // Redirect to cart
+    window.location.href = '/cart';
   };
 
   useEffect(() => {
@@ -166,7 +178,7 @@ const CategoryPage = () => {
                     selectedImage === img ? 'border-[1px] border-black' : ''
                   }`}
                   imgKey={img}
-                  onClick={() => setSelectedImage(img)} // Set the selected image on click
+                  onClick={() => setSelectedImage(img)}
                 />
               ))}
             </div>
@@ -194,11 +206,19 @@ const CategoryPage = () => {
 
             <div className='flex sm:w-[77px] sm:h-[38px] items-center mb-[14px] sm:mb-[12px]'>
               <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] font-semibold text-gray-800'>
-                ${productDetails.price}
-              </span>
-              <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] text-gray-400 ml-4 line-through'>
                 ${productDetails.newPrice}
               </span>
+
+              {productDetails.price > 0 && productDetails.discount > 0 && (
+                <>
+                  <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] text-gray-400 ml-4 line-through'>
+                    ${productDetails.price}
+                  </span>
+                  <span className='sm:text-[16px] text-[12px] sm:leading-[20px] leading-[16px] px-2 py-1 bg-[pink] text-[#FF3333] font-semibold rounded-[62px] ml-4'>
+                    {productDetails.discount}%
+                  </span>
+                </>
+              )}
             </div>
 
             <p className='pt-[23px] sm:pt[28px] w-full leading-[20px] sm:text-[16px] text-[14px] sm:leading-[22px] font-medium text-[#00000099] mb-[25px] sm:mb-[23px]'>
@@ -207,11 +227,11 @@ const CategoryPage = () => {
 
             <div className='mt-4'>
               <h4 className='font-semibold text-gray-800 mb-2'>Sizes:</h4>
-              <div className='flex space-x-4'>
+              <div className='flex space-x-4 gap-[12px]'>
                 {productDetails.sizes?.map((size, index) => (
                   <button
                     key={index}
-                    className={`px-4 py-2 border rounded-lg ${
+                    className={`px-4 py-2 border rounded-[62px] ${
                       size === selectedSize ? 'bg-black text-white' : 'bg-gray-200'
                     }`}
                     onClick={() => setSelectedSize(size)}>
@@ -227,19 +247,60 @@ const CategoryPage = () => {
                 {productDetails.colors?.map((color, index) => (
                   <button
                     key={index}
-                    className={`w-8 h-8 rounded-full ${color === selectedColor ? 'border-2 border-black' : ''}`}
+                    className={`w-8 h-8 rounded-full relative ${
+                      color === selectedColor ? 'border-2 border-black' : ''
+                    }`}
                     style={{backgroundColor: color}}
-                    onClick={() => setSelectedColor(color)}
-                  />
+                    onClick={() => setSelectedColor(color)}>
+                    {color === selectedColor && (
+                      <span className='absolute inset-0 flex justify-center items-center'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          x='0px'
+                          y='0px'
+                          width='100'
+                          height='100'
+                          viewBox='0 0 32 32'
+                          fill='white'>
+                          <path d='M 28.28125 6.28125 L 11 23.5625 L 3.71875 16.28125 L 2.28125 17.71875 L 10.28125 25.71875 L 11 26.40625 L 11.71875 25.71875 L 29.71875 7.71875 Z'></path>
+                        </svg>
+                      </span>
+                    )}
+                  </button>
                 ))}
               </div>
             </div>
-
-            <button
-              className='mt-[51px] sm:mt-[50px] px-6 py-3 bg-black sm:text-[16px] text-white rounded-lg'
-              onClick={handleAddToCart}>
-              Add to Cart
-            </button>
+            <div className='flex items-center'>
+              {cartItems.length === 0 ? (
+                <p>No items in the cart</p>
+              ) : (
+                cartItems.map((item, index) => (
+                  <div
+                    key={index}
+                    className='flex items-center mt-[51px] sm:mt-[50px] space-x-2 bg-gray-200 px-4 py-2 rounded-[62px]'>
+                    <button
+                      className='px-2 text-lg font-bold '
+                      onClick={() => updateCartItemQuantity(item.id, item.quantity > 1 ? item.quantity - 1 : 1)} // Ensures quantity doesn't go below 1
+                    >
+                      -
+                    </button>
+                    <span className='font-semibold'>{item.quantity || 1}</span>{' '}
+                    {/* Default quantity is 1 if undefined */}
+                    <button
+                      className='px-2 text-lg font-bold'
+                      onClick={() => updateCartItemQuantity(item.id, item.quantity + 1)} // Increase quantity
+                    >
+                      +
+                    </button>
+                  </div>
+                ))
+              )}
+              <button
+                className='mt-[51px] sm:mt-[50px] px-[24px] w-full ml-[24px] py-3 bg-black sm:text-[16px] text-white rounded-[62px]'
+                onClick={handleAddToCart}>
+                Add to Cart
+              </button>
+            </div>
           </div>
         </div>
 
@@ -273,11 +334,10 @@ const CategoryPage = () => {
           <CreateReview productID={productId} onReviewSubmit={handleNewReview} />
         </div>
 
-        {/* Sections: Details, FAQs, Reviews */}
         {activeSection === 'details' && (
           <div className='mt-12'>
             <h3 className='text-2xl font-semibold mb-4'>Product Details</h3>
-            <p>{productDetails.details}</p>
+            <p>{productDetails.description}</p>
           </div>
         )}
         {activeSection === 'faqs' && (

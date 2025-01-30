@@ -1,6 +1,6 @@
 'use client';
 import React, {useState, useEffect} from 'react';
-import {updatePassword} from 'aws-amplify/auth';
+import {updatePassword, updateUserAttributes, sendUserAttributeVerificationCode} from 'aws-amplify/auth';
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -10,11 +10,23 @@ const Profile = () => {
     address: '',
     currentPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    newEmail: ''
   });
 
   // Load data from localStorage when the component mounts
   useEffect(() => {
+    // Get the email from the URL query parameters
+    const queryParams = new URLSearchParams(window.location.search);
+    const emailFromUrl = queryParams.get('email');
+
+    if (emailFromUrl) {
+      setFormData((prevData) => ({
+        ...prevData,
+        email: emailFromUrl
+      }));
+    }
+
     const storedData = localStorage.getItem('profileData');
     if (storedData) {
       setFormData(JSON.parse(storedData));
@@ -37,6 +49,31 @@ const Profile = () => {
     }
   };
 
+  const handleUpdateEmail = async () => {
+    try {
+      // Step 1: Update the email
+      await updateUserAttributes({
+        userAttributes: {
+          email: formData.newEmail // Make sure this is the new email
+        }
+      });
+
+      // Step 2: Send the verification code for the email
+      await sendUserAttributeVerificationCode({
+        userAttributeKey: 'email', // Email is being updated
+        options: {}
+      });
+
+      console.log('Email update initiated. Please verify the new email.');
+
+      // Redirect to OTP screen with the email as a query parameter
+      window.location.href = `/auth/emailotp?email=${encodeURIComponent(formData.email)}`;
+    } catch (err) {
+      console.log('Error updating email:', err);
+      alert('Failed to update email');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -54,7 +91,7 @@ const Profile = () => {
   };
 
   return (
-    <div className='pt-[363px] bg-gray-50 min-h-screen'>
+    <div className='pt-[100px] bg-gray-50 min-h-screen'>
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='grid grid-cols-1 lg:grid-cols-4 gap-8'>
           {/* Sidebar */}
@@ -75,7 +112,6 @@ const Profile = () => {
             </div>
           </div>
 
-          {/* Profile Form */}
           <div className='col-span-1 lg:col-span-3 bg-white shadow-md rounded-lg p-8'>
             <h2 className='text-2xl font-semibold mb-6'>Edit Your Profile</h2>
             <form onSubmit={handleSubmit}>
@@ -115,6 +151,25 @@ const Profile = () => {
                   className='w-full p-3 bg-[#F5F5F5] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
                 />
               </div>
+
+              {/* New Email Section */}
+              <div className='mb-6'>
+                <input
+                  type='email'
+                  name='newEmail'
+                  placeholder='New Email'
+                  value={formData.newEmail}
+                  onChange={handleChange}
+                  className='w-full p-3 bg-[#F5F5F5] border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'
+                />
+                <button
+                  type='button'
+                  onClick={handleUpdateEmail}
+                  className='w-full mt-4 p-3 bg-black text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500'>
+                  Change Email
+                </button>
+              </div>
+
               <h3 className='text-lg font-semibold mb-4'>Password Changes</h3>
               <div className='space-y-4 mb-6'>
                 <input

@@ -34,9 +34,9 @@ export const metadata = {
 
 export default function RootLayout({children}) {
   return (
-    <html lang='en' className='overflow-x-hidden max-w-[1440px] flex mx-auto'>
+    <html lang='en' className='overflow-x-hidden max-w-[2440px] flex mx-auto'>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${abeezee.className}  flex mx-auto flex-col  overflow-x-hidden  antialiased`}>
+        className={`${geistSans.variable} ${geistMono.variable} ${abeezee.className} bg-white flex mx-auto flex-col  overflow-x-hidden  antialiased`}>
         <CustomProvider>
           <ProductProvider>
             <CartProvider>

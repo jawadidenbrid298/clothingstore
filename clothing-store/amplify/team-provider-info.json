@@ -22,6 +22,10 @@
         "postconfiguration": {
           "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
           "s3Key": "amplify-builds/postconfiguration-61376a32502b44457239-build.zip"
+        },
+        "topratedproducts": {
+          "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
+          "s3Key": "amplify-builds/topratedproducts-4479346276304b387551-build.zip"
         }
       },
       "storage": {

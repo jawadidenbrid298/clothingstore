@@ -1,8 +1,8 @@
 'use client';
 import React, {useState, useEffect} from 'react';
-import {generateClient} from 'aws-amplify/api'; // Import generateClient
+import {generateClient} from 'aws-amplify/api';
 import {StorageImage} from '@aws-amplify/ui-react-storage';
-import {listProductshopcojawads, listReviewshops} from '../../../graphql/queries'; // Import GraphQL queries
+import {listProductshopcojawads, listReviewshops, Toprated} from '../../../graphql/queries';
 import Link from 'next/link';
 import {ABeeZee} from '@next/font/google';
 
@@ -15,71 +15,54 @@ const abeezee = ABeeZee({
 
 const FeaturedPage = () => {
   const [products, setProducts] = useState({newArrivals: [], topSelling: []});
-  const [ratings, setRatings] = useState({}); // Store average ratings
+  const [ratings, setRatings] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showAllNewArrivals, setShowAllNewArrivals] = useState(false);
   const [showAllTopSelling, setShowAllTopSelling] = useState(false);
-  const [nextToken, setNextToken] = useState(null); // For pagination
+  const [nextToken, setNextToken] = useState(null);
   const [filter, setFilter] = useState(null);
 
-  // Fetch products dynamically
   useEffect(() => {
     const fetchProducts = async () => {
       const client = generateClient();
       try {
-        // Fetch products with limit set to 8 and nextToken for pagination
         const response = await client.graphql({
           query: listProductshopcojawads,
           variables: {
             filter,
-            limit: 8, // Set limit to 8
-            nextToken // Only pass nextToken if it's available
+            limit: 16,
+            nextToken
           }
         });
 
         if (response.data && response.data.listProductshopcojawads) {
-          const newProducts = response.data.listProductshopcojawads.items;
+          let newProducts = response.data.listProductshopcojawads.items;
 
-          // Prevent duplication by checking if the product is already in state
           const existingProductIds = new Set(products.newArrivals.map((product) => product.id));
           const uniqueNewProducts = newProducts.filter((product) => !existingProductIds.has(product.id));
 
           if (uniqueNewProducts.length > 0) {
-            // Sort new arrivals by creation date (assumes `createdAt` is available)
             const sortedNewArrivals = uniqueNewProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-            // Fetch average ratings for all products
             fetchAllRatings(uniqueNewProducts);
 
             setProducts((prevState) => ({
               newArrivals: [...prevState.newArrivals, ...sortedNewArrivals],
-              topSelling: [...prevState.topSelling] // Keep the existing top-selling products intact
+              topSelling: [...prevState.topSelling]
             }));
           }
-
-          // Sort top-selling products by ratings (highest rating first)
-          const sortedTopSelling = [...products.topSelling, ...uniqueNewProducts].sort((a, b) => {
-            const ratingA = ratings[a.id] || 0;
-            const ratingB = ratings[b.id] || 0;
-            return ratingB - ratingA; // Sort by descending rating
-          });
-
-          setProducts((prevState) => ({
-            newArrivals: prevState.newArrivals,
-            topSelling: sortedTopSelling // Update top-selling products only
-          }));
 
           if (response.data.listProductshopcojawads.nextToken) {
             setNextToken(response.data.listProductshopcojawads.nextToken);
           } else {
-            setNextToken(null); // No more data, stop further fetches
+            setNextToken(null);
           }
-
-          setLoading(false);
         } else {
           throw new Error('No data returned from the API');
         }
+
+        setLoading(false);
       } catch (error) {
         setError('Error fetching product data');
         setLoading(false);
@@ -87,13 +70,11 @@ const FeaturedPage = () => {
       }
     };
 
-    // Trigger the fetch when nextToken is available or initially
     if (nextToken !== null || !products.newArrivals.length) {
       fetchProducts();
     }
   }, [nextToken, filter, ratings]);
 
-  // Fetch average ratings for all products
   const fetchAllRatings = async (products) => {
     const client = generateClient();
     const ratingsObj = {};
@@ -119,6 +100,71 @@ const FeaturedPage = () => {
     setRatings((prevRatings) => ({...prevRatings, ...ratingsObj}));
   };
 
+  const fetchTopRatedProducts = async () => {
+    const client = generateClient();
+    try {
+      const topRatedResponse = await client.graphql({
+        query: Toprated
+      });
+
+      console.log('Toprated Response:', topRatedResponse);
+
+      const topRatedProducts = topRatedResponse.data.Toprated;
+
+      if (topRatedProducts && topRatedProducts.length > 0) {
+        const topProductIDs = topRatedProducts.map((product) => product.productID);
+        console.log('Top Product IDs:', topProductIDs);
+
+        const productDetails = await Promise.all(
+          topProductIDs.map(async (productID) => {
+            const response = await client.graphql({
+              query: listProductshopcojawads,
+              variables: {
+                filter: {
+                  id: {eq: productID}
+                }
+              }
+            });
+
+            console.log('Full Response for productID:', productID, response);
+
+            if (
+              !response ||
+              !response.data ||
+              !response.data.listProductshopcojawads ||
+              response.data.listProductshopcojawads.items.length === 0
+            ) {
+              console.log(`No products found for ID: ${productID}`);
+            }
+
+            return response;
+          })
+        );
+
+        console.log('All Product Details:', productDetails);
+
+        console.log('Product Details:', productDetails);
+
+        const topSellingProducts = productDetails.flatMap((response) => response.data.listProductshopcojawads.items);
+        console.log('Top Selling Products:', topSellingProducts);
+
+        setProducts((prevState) => ({
+          newArrivals: prevState.newArrivals,
+          topSelling: topSellingProducts
+        }));
+      } else {
+        console.log('No top-rated products found.');
+      }
+    } catch (error) {
+      setError('Error fetching top-rated products');
+      console.error('Error fetching top-rated products:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTopRatedProducts();
+  }, [ratings]);
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -128,20 +174,16 @@ const FeaturedPage = () => {
   }
 
   return (
-    <div className={`bg-[#fffff] py-8 ${abeezee.className}`}>
+    <div className={`bg-[#ffffff] py-8 ${abeezee.className}`}>
       <div className='container mx-auto px-4'>
-        {/* New Arrivals Section */}
         <div className='mb-8'>
           <h2 className='text-[32px] sm:text-[48px] text-gray-800 text-center'>NEW ARRIVALS</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6'>
             {(showAllNewArrivals ? products.newArrivals : products.newArrivals.slice(0, 4)).map((product) => (
-              <Link
-                key={product.id}
-                href={`/category?id=${product.id}`} // Navigate to CategoryPage with the product's ID as query param
-              >
-                <div className='bg-white flex flex-col items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
+              <Link key={product.id} href={`/category?id=${product.id}`}>
+                <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
                   <StorageImage
-                    className='w-[295px] h-[298px] object-cover rounded-[20px] mb-4'
+                    className='w-full h-[298px] object-cover rounded-[20px] mb-4'
                     imgKey={product.images[0] || 'products/1737718292964_1.png'}
                     alt={product.name}
                   />
@@ -161,8 +203,18 @@ const FeaturedPage = () => {
                     </div>
                   </div>
                   <div className='mt-2'>
-                    <span className='text-black sm:text-[24px] text-[20px] mr-2'>${product.price}</span>
-                    <span className='text-xl font-semibold text-gray-800'>${product.newPrice}</span>
+                    <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>${product.newPrice}</span>
+
+                    {product.price > 0 && product.discount > 0 && (
+                      <>
+                        <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
+                          ${product.price}
+                        </span>
+                        <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-full'>
+                          {product.discount}%
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </Link>
@@ -177,18 +229,16 @@ const FeaturedPage = () => {
           </div>
         </div>
 
-        {/* Separator Line */}
         <div className='border-t-2' style={{borderColor: '#F2F0F1'}}></div>
 
-        {/* Top Selling Section */}
         <div className='mt-8'>
           <h2 className='sm:text-[48px] text-[32px] text-black text-center'>TOP SELLING</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6'>
             {(showAllTopSelling ? products.topSelling : products.topSelling.slice(0, 4)).map((product) => (
               <Link key={product.id} href={`/category?id=${product.id}`}>
-                <div className='bg-white flex flex-col items-start justify-center mx-auto text-left p-4 rounded-md cursor-pointer'>
+                <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto text-left p-4 rounded-md cursor-pointer'>
                   <StorageImage
-                    className='w-[295px] h-[298px] object-cover rounded-[20px] mb-4'
+                    className='w-full h-[298px] object-cover rounded-[20px] mb-4'
                     imgKey={product.images && product.images[0] ? product.images[0] : 'placeholder-image.png'}
                     alt={product.name}
                   />
@@ -208,8 +258,18 @@ const FeaturedPage = () => {
                     </div>
                   </div>
                   <div className='mt-2'>
-                    <span className='text-black sm:text-[24px] text-[20px] mr-2'>${product.price}</span>
-                    <span className='text-xl font-semibold text-gray-800'>${product.newPrice}</span>
+                    <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>${product.newPrice}</span>
+
+                    {product.price > 0 && product.discount > 0 && (
+                      <>
+                        <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
+                          ${product.price}
+                        </span>
+                        <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-[62px]'>
+                          {product.discount}%
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </Link>
