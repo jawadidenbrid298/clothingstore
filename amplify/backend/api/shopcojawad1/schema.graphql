@@ -44,7 +44,7 @@ type Query {
   Toprated: [ProductRating] @function(name: "topratedproducts-dev")
 }
 
-type Subscriptions {
+type Mutations {
   sendEmail(name: String!, email: String!, phone: String!, message: String!): EmailResponse
     @function(name: "jawadses-dev")
 }
