@@ -1,14 +1,12 @@
 'use client';
 import React, {useState, useEffect} from 'react';
 import {confirmUserAttribute} from '@aws-amplify/auth'; // Import the method to confirm the attribute
-import {useNavigate} from 'react-router-dom'; // Use navigate for redirection
 
 const OtpScreen = () => {
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate(); // Use navigate for redirection
 
   useEffect(() => {
     // Access the email from URL query
@@ -47,6 +45,7 @@ const OtpScreen = () => {
     setError('');
 
     const confirmationCode = otp.join('');
+    console.log('OTP entered:', confirmationCode); // Log the OTP
 
     if (confirmationCode.length !== 6) {
       setError('OTP must be 6 digits long');
@@ -69,8 +68,8 @@ const OtpScreen = () => {
 
       console.log('Email attribute confirmed successfully.');
 
-      // Optionally, redirect to the profile page or another screen
-      navigate('/profile'); // Assuming you're using react-router for navigation
+      // Redirect to profile page or any other page
+      window.location.href = '/profile'; // This will redirect the user to the profile page
     } catch (error) {
       console.error('Error confirming email attribute:', error);
       setError('Invalid OTP. Please check and try again.');

@@ -43,3 +43,13 @@ type ProductRating {
 type Query {
   Toprated: [ProductRating] @function(name: "topratedproducts-dev")
 }
+
+type Subscriptions {
+  sendEmail(name: String!, email: String!, phone: String!, message: String!): EmailResponse
+    @function(name: "jawadses-dev")
+}
+
+type EmailResponse {
+  message: String
+  success: Boolean
+}

@@ -44,6 +44,11 @@
     }
   },
   "function": {
+    "jawadses": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "postconfiguration": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -56,6 +61,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_jawadses_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "jawadses"
+        }
+      ]
+    },
+    "AMPLIFY_function_jawadses_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "jawadses"
+        }
+      ]
+    },
     "AMPLIFY_function_postconfiguration_deploymentBucketName": {
       "usedBy": [
         {

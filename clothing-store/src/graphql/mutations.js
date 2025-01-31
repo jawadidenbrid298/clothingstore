@@ -1,6 +1,20 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const sendEmail = /* GraphQL */ `
+  mutation SendEmail(
+    $name: String!
+    $email: String!
+    $phone: String!
+    $message: String!
+  ) {
+    sendEmail(name: $name, email: $email, phone: $phone, message: $message) {
+      message
+      success
+      __typename
+    }
+  }
+`;
 export const createUsershopjawad = /* GraphQL */ `
   mutation CreateUsershopjawad(
     $input: CreateUsershopjawadInput!

@@ -1,9 +1,53 @@
 'use client';
 
-import React from 'react';
+import React, {useState} from 'react';
 import {FaPhoneAlt, FaEnvelope} from 'react-icons/fa';
+import {generateClient} from 'aws-amplify/api';
+import {sendEmail} from '@/graphql/mutations';
 
 const ContactSection = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  });
+  const [status, setStatus] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus(null);
+
+    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
+      setStatus({success: false, message: 'All fields are required.'});
+      return;
+    }
+
+    try {
+      const client = generateClient();
+
+      console.log('Form Data to be sent:', formData);
+
+      const result = await client.graphql({
+        query: sendEmail,
+        variables: formData
+      });
+
+      console.log('Email sent successfully:', result);
+      setStatus({success: true, message: 'Email sent successfully!'});
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setStatus({success: false, message: 'Error sending email. Please try again later.'});
+    }
+  };
+
   return (
     <div className='min-h-screen bg-gray-50 flex flex-col sm:flex-row px-4 sm:px-8 md:px-16 py-8 pt-[50px]'>
       {/* Left Section: Contact Information */}
@@ -40,28 +84,40 @@ const ContactSection = () => {
 
       {/* Right Section: Form */}
       <div className='w-full sm:w-2/3 bg-white shadow-md p-8 rounded-lg sm:ml-8'>
-        <form className='space-y-4'>
+        <form onSubmit={handleSubmit} className='space-y-4'>
           <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
             <input
               type='text'
+              name='name'
+              value={formData.name}
+              onChange={handleChange}
               placeholder='Your Name *'
               className='border border-gray-300 bg-[#F5F5F5] rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
               required
             />
             <input
               type='email'
+              name='email'
+              value={formData.email}
+              onChange={handleChange}
               placeholder='Your Email *'
               className='border border-gray-300  bg-[#F5F5F5] rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
               required
             />
             <input
               type='tel'
+              name='phone'
+              value={formData.phone}
+              onChange={handleChange}
               placeholder='Your Phone *'
               className='border border-gray-300 bg-[#F5F5F5] rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500'
               required
             />
           </div>
           <textarea
+            name='message'
+            value={formData.message}
+            onChange={handleChange}
             placeholder='Your Message'
             className='border border-gray-300  bg-[#F5F5F5] rounded-lg px-4 py-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500'
             required
@@ -73,6 +129,13 @@ const ContactSection = () => {
             </button>
           </div>
         </form>
+
+        {/* Displaying status message */}
+        {status && (
+          <div className={`mt-4 p-4 ${status.success ? 'bg-green-200' : 'bg-red-200'} text-center`}>
+            {status.message}
+          </div>
+        )}
       </div>
     </div>
   );

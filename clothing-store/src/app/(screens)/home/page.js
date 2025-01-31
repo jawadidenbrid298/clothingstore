@@ -94,7 +94,7 @@ export default function HeroSection() {
 
       {/* Brand Logos Section */}
       <div className='bg-black p-10 sm:w-full flex items-center justify-center'>
-        <div className='flex flex-wrap justify-center gap-10'>
+        <div className='flex w-full flex-wrap justify-center gap-10'>
           <img src='/versace.png' alt='Versace' className='h-12' />
           <img src='/zara.png' alt='Zara' className='h-12' />
           <img src='/gucci.png' alt='Gucci' className='h-12' />

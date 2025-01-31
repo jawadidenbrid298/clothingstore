@@ -9,23 +9,21 @@ const Cart = () => {
   const [discount, setDiscount] = useState(0);
   console.log(cartItems);
 
-  // Check and apply promo code
   const handleApplyPromo = () => {
     if (promoCode === 'DISCOUNT10') {
-      setDiscount(10); // Apply 10% discount for valid promo code
+      setDiscount(10);
     } else if (promoCode === 'MC20') {
-      setDiscount(20); // Apply 20% discount for valid promo code
+      setDiscount(20);
     } else {
       alert('Invalid promo code');
       setDiscount(0);
     }
   };
 
-  // Calculate total price with discount
   const calculateTotal = () => {
     let total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    total += 15; // Add $15 for shipping
-    total -= (total * discount) / 100; // Apply discount
+    total += 15;
+    total -= (total * discount) / 100;
     return total;
   };
 
@@ -34,9 +32,9 @@ const Cart = () => {
   };
 
   return (
-    <div className='flex flex-col md:flex-row p-6 space-y-6 justify-center md:space-y-0 md:space-x-6 bg-white rounded-md shadow-md px-[20px] xl:px-[100px]'>
+    <div className='flex flex-col md:flex-row p-6 space-y-6 justify-center md:space-y-0 md:space-x-6 bg-white shadow-md px-[20px] xl:px-[100px]'>
       {/* Left Side: Cart Items */}
-      <div className='w-full max-w-[715px] bg-white p-6 rounded-md shadow-sm'>
+      <div className='w-full border black max-w-[715px] sm:h-full h-full bg-white p-6 rounded-[20px] shadow-sm'>
         <h2 className='text-2xl font-semibold mb-4'>Your cart</h2>
 
         {cartItems.length === 0 ? (
@@ -75,24 +73,26 @@ const Cart = () => {
               </div>
 
               {/* Price */}
-              <span className='font-semibold text-lg'>${(item.price * item.quantity).toFixed(2)}</span>
+              <span className='font-semibold text-lg'>${(item.newPrice * item.quantity).toFixed(2)}</span>
             </div>
           ))
         )}
       </div>
 
       {/* Right Side: Order Summary */}
-      <div className='w-full max-w-[505px] bg-white p-6 rounded-md shadow-mdpl-[20px]'>
+      <div className='w-full max-w-[505px] h-full bg-white p-6 rounded-[20px] border black shadow-sm '>
         <h3 className='font-semibold text-lg mb-4'>Order Summary</h3>
 
         <div className='flex justify-between mb-2'>
           <span>Subtotal</span>
-          <span className='font-semibold'>${cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)}</span>
+          <span className='font-semibold'>
+            ${cartItems.reduce((sum, item) => sum + item.newPrice * item.quantity, 0)}
+          </span>
         </div>
 
         {/* Discount */}
         <div className='flex justify-between mb-2'>
-          <span className='text-red-500'>Discount ({discount}%)</span>
+          <span className='text-black'>Discount ({discount}%)</span>
           <span className='text-red-500'>
             -${((cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0) + 15) * discount) / 100}
           </span>
@@ -115,10 +115,10 @@ const Cart = () => {
               type='text'
               value={promoCode}
               onChange={(e) => setPromoCode(e.target.value)}
-              className='w-full p-2 bg-gray-200 rounded-[64px] h-[64px]'
+              className='w-full p-2 bg-gray-200 rounded-[64px] h-[48px] py-2'
               placeholder='Enter promo code'
             />
-            <button onClick={handleApplyPromo} className='bg-black text-white px-4 py-2 rounded-[62px]'>
+            <button onClick={handleApplyPromo} className='bg-black text-white px-4 py-2 rounded-[62px] h-[48px]'>
               Apply
             </button>
           </div>
@@ -127,7 +127,7 @@ const Cart = () => {
         {/* Checkout Button */}
         <button
           onClick={handleCheckout}
-          className='w-full mt-6 py-3 bg-black text-white text-lg rounded-[62px] flex items-center justify-center'>
+          className='w-full mt-6 py-3 px-6 bg-black text-white text-lg rounded-[62px] flex items-center justify-center'>
           Go to Checkout →
         </button>
 
@@ -138,7 +138,7 @@ const Cart = () => {
               clearCart();
               alert('Cart cleared');
             }}
-            className='w-full mt-4 py-2 bg-black text-white rounded-[62px]'>
+            className='w-full mt-4 py-2 px-6 bg-black text-white rounded-[62px]'>
             Clear Cart
           </button>
         )}

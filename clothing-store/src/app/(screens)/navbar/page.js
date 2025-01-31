@@ -73,7 +73,9 @@ const Navbar = () => {
             </div>
 
             <div className='hidden lg:flex gap-[24px] pl-[40px] h-[19px] items-center '>
-              <Link href='/' className='abeezee text-[16px] w-full leading-[18.91px] text-black decoration-black'>
+              <Link
+                href='/shoppage'
+                className='abeezee text-[16px] w-full leading-[18.91px] text-black decoration-black'>
                 Shop
               </Link>
               <Link href='/' className='abeezee text-[16px] w-full leading-[18.91px] text-black decoration-black'>
@@ -88,7 +90,7 @@ const Navbar = () => {
                 Brands
               </Link>
               <button
-                onClick={() => handleNavigate('/productmodal')}
+                onClick={() => handleNavigate('/admin/adminpanel')}
                 className='abeezee text-[16px] leading-[18.91px] cursor-pointer text-black decoration-black'>
                 AddProduct
               </button>
