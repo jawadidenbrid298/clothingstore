@@ -2,7 +2,7 @@
 import React, {useState, useRef} from 'react';
 import {generateClient} from 'aws-amplify/api';
 import {createReviewshop} from '../../../graphql/mutations';
-import ProtectedRoute from '@/app/Protectedroute'; // GraphQL mutation
+import ProtectedRoute from '@/app/Protectedroute';
 
 const CreateReview = ({productID}) => {
   const [name, setName] = useState('');
@@ -10,17 +10,15 @@ const CreateReview = ({productID}) => {
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
-  const modalRef = useRef(); // To detect clicks outside the modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalRef = useRef();
 
-  // Close modal if click outside
   const handleOutsideClick = (e) => {
     if (modalRef.current && !modalRef.current.contains(e.target)) {
       setIsModalOpen(false);
     }
   };
 
-  // Add event listener to close modal on outside click
   React.useEffect(() => {
     document.addEventListener('mousedown', handleOutsideClick);
     return () => document.removeEventListener('mousedown', handleOutsideClick);
@@ -31,7 +29,7 @@ const CreateReview = ({productID}) => {
     setLoading(true);
     setError(null);
 
-    const client = generateClient(); // Initialize the client
+    const client = generateClient();
 
     try {
       const variables = {

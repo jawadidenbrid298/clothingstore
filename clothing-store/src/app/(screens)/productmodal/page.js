@@ -29,13 +29,12 @@ const ProductModal = () => {
     const {name, value} = e.target;
     const newData = {...productData, [name]: value};
 
-    // Calculate new price when discount percentage is updated
     if (name === 'discountPercentage' && newData.discountPercentage && productData.price) {
       const discountPercentage = parseFloat(newData.discountPercentage);
       const originalPrice = parseFloat(productData.price);
       const newPrice = originalPrice - originalPrice * (discountPercentage / 100);
 
-      newData.newPrice = newPrice.toFixed(2); // Save the new price with 2 decimal places
+      newData.newPrice = newPrice.toFixed(2);
     }
 
     setProductData(newData);
@@ -59,7 +58,6 @@ const ProductModal = () => {
     }));
   };
 
-  // Upload images and return their paths
   const uploadImages = async (files) => {
     const uploadedKeys = [];
     for (let i = 0; i < files.length; i++) {
@@ -95,11 +93,9 @@ const ProductModal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Calculate the new price based on the discount percentage
     const discount = parseFloat(productData.discountPercentage) || 0;
     const newPrice = calculateNewPrice(parseFloat(productData.price), discount);
 
-    // Upload images and get their keys
     const uploadedImageKeys = await uploadImages(productData.images);
 
     // Create product object
@@ -114,13 +110,12 @@ const ProductModal = () => {
       images: uploadedImageKeys
     };
 
-    // Only add `price` if discount is greater than 0
     if (discount > 0) {
       newProduct.price = parseFloat(productData.price);
     }
 
     try {
-      const client = generateClient(); // Initialize the client
+      const client = generateClient();
       const response = await client.graphql({
         query: createProductshopcojawad,
         variables: {input: newProduct}
@@ -182,7 +177,6 @@ const ProductModal = () => {
                 </select>
               </div>
 
-              {/* Product Name */}
               <div className='mb-4'>
                 <label htmlFor='name' className='block text-sm font-medium text-gray-700'>
                   Product Name
@@ -198,7 +192,6 @@ const ProductModal = () => {
                 />
               </div>
 
-              {/* Price */}
               <div className='mb-4'>
                 <label htmlFor='price' className='block text-sm font-medium text-gray-700'>
                   Price ($)
@@ -228,7 +221,6 @@ const ProductModal = () => {
                 />
               </div>
 
-              {/* Display New Price after Calculation */}
               <div className='mb-4'>
                 <label htmlFor='newPrice' className='block text-sm font-medium text-gray-700'>
                   New Price (calculated)
@@ -244,7 +236,6 @@ const ProductModal = () => {
                 />
               </div>
 
-              {/* Sizes */}
               <div className='mb-4'>
                 <label htmlFor='sizes' className='block text-sm font-medium text-gray-700'>
                   Sizes (comma-separated)
@@ -261,7 +252,6 @@ const ProductModal = () => {
                 />
               </div>
 
-              {/* Colors */}
               <div className='mb-4'>
                 <label htmlFor='colors' className='block text-sm font-medium text-gray-700'>
                   Colors (comma-separated)
@@ -278,7 +268,6 @@ const ProductModal = () => {
                 />
               </div>
 
-              {/* Description */}
               <div className='mb-4'>
                 <label htmlFor='description' className='block text-sm font-medium text-gray-700'>
                   Description
@@ -295,7 +284,6 @@ const ProductModal = () => {
                 />
               </div>
 
-              {/* Image Upload */}
               <div className='mb-4'>
                 <label htmlFor='images' className='block text-sm font-medium text-gray-700'>
                   Upload Images (max 4)
@@ -323,14 +311,12 @@ const ProductModal = () => {
                 )}
               </div>
 
-              {/* Upload Progress */}
               {uploadProgress > 0 && (
                 <div className='mb-4'>
                   <p className='text-sm text-gray-700'>Upload Progress: {uploadProgress}%</p>
                 </div>
               )}
 
-              {/* Submit Button */}
               <div>
                 <button type='submit' className='w-full bg-black text-white py-2 rounded-lg'>
                   Save Product
@@ -338,7 +324,6 @@ const ProductModal = () => {
               </div>
             </form>
 
-            {/* Sign Out Button */}
             <div className='mt-4'>
               <SignOutButton />
             </div>

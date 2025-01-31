@@ -6,8 +6,7 @@ const ReviewCarousel = () => {
   const carouselRef = useRef(null);
 
   useEffect(() => {
-    // Fetching reviews from the JSON file (or API endpoint)
-    fetch('/reviews.json') // Update this path to your actual reviews file location or API endpoint
+    fetch('/reviews.json')
       .then((response) => response.json())
       .then((data) => setReviews(data))
       .catch((error) => console.error('Error fetching reviews:', error));
@@ -27,12 +26,9 @@ const ReviewCarousel = () => {
 
   return (
     <div className='w-full mx-auto py-20 px-8 sm:px-16 lg:px-24'>
-      {/* Heading */}
       <h2 className='text-left text-3xl font-bold mb-6'>OUR HAPPY CUSTOMERS</h2>
 
-      {/* Arrows Side by Side */}
       <div className='flex justify-end items-center space-x-4 mb-4'>
-        {/* Left Arrow */}
         <button
           onClick={() => handleScroll('prev')}
           className='flex items-center justify-center w-10 h-10  hover:bg-gray-300 rounded-full transition'>
@@ -44,7 +40,6 @@ const ReviewCarousel = () => {
           </svg>
         </button>
 
-       
         <button
           onClick={() => handleScroll('next')}
           className='flex items-center justify-center w-10 h-10  hover:bg-gray-300 rounded-full transition'>
@@ -65,20 +60,19 @@ const ReviewCarousel = () => {
           <div
             key={index}
             className='review-card min-w-[300px] sm:min-w-[340px] lg:min-w-[400px] bg-white border border-gray-200 rounded-lg shadow-md p-6 flex flex-col justify-between'>
-            {/* Stars */}
             <div className='stars text-yellow-400 flex items-center mb-4'>
               {Array(review.rating)
                 .fill(null)
                 .map((_, i) => (
-                  <span key={i}>&#9733;</span> 
+                  <span key={i}>&#9733;</span>
                 ))}
             </div>
-            {/* Reviewer Name */}
+
             <h3 className='text-lg font-bold flex items-center mb-2'>
               {review.name}
               <span className='text-green-500 text-sm ml-2'>&#x2714;</span> {/* Checkmark */}
             </h3>
-            {/* Review Text */}
+
             <p className='text-gray-600'>{review.review}</p>
           </div>
         ))}

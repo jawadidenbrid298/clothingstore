@@ -42,7 +42,7 @@ const Navbar = () => {
     currentSession();
   }, []);
 
-  if (loading) return <div>Loading...</div>; // or a loading spinner
+  if (loading) return <div>Loading...</div>;
 
   const handleNavigate = (path) => {
     setIsDropdownOpen(false);

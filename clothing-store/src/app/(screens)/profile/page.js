@@ -14,9 +14,7 @@ const Profile = () => {
     newEmail: ''
   });
 
-  // Load data from localStorage when the component mounts
   useEffect(() => {
-    // Get the email from the URL query parameters
     const queryParams = new URLSearchParams(window.location.search);
     const emailFromUrl = queryParams.get('email');
 
@@ -51,22 +49,19 @@ const Profile = () => {
 
   const handleUpdateEmail = async () => {
     try {
-      // Step 1: Update the email
       await updateUserAttributes({
         userAttributes: {
-          email: formData.newEmail // Make sure this is the new email
+          email: formData.newEmail
         }
       });
 
-      // Step 2: Send the verification code for the email
       await sendUserAttributeVerificationCode({
-        userAttributeKey: 'email', // Email is being updated
+        userAttributeKey: 'email',
         options: {}
       });
 
       console.log('Email update initiated. Please verify the new email.');
 
-      // Redirect to OTP screen with the email as a query parameter
       window.location.href = `/auth/emailotp?email=${encodeURIComponent(formData.email)}`;
     } catch (err) {
       console.log('Error updating email:', err);
@@ -77,12 +72,10 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Save the form data to localStorage
     localStorage.setItem('profileData', JSON.stringify(formData));
     console.log('Form Submitted and Saved:', formData);
     alert('Profile information saved successfully!');
 
-    // Handle password change if new passwords match
     if (formData.newPassword && formData.newPassword === formData.confirmPassword) {
       await handleUpdatePassword(formData.currentPassword, formData.newPassword);
     } else {
@@ -152,7 +145,6 @@ const Profile = () => {
                 />
               </div>
 
-              {/* New Email Section */}
               <div className='mb-6'>
                 <input
                   type='email'
