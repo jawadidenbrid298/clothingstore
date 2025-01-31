@@ -4,7 +4,7 @@ import {generateClient} from 'aws-amplify/api';
 import {StorageImage} from '@aws-amplify/ui-react-storage';
 import {listProductshopcojawads, listReviewshops, Toprated} from '../../../graphql/queries';
 import Link from 'next/link';
-import {ABeeZee} from '@next/font/google';
+import {ABeeZee} from 'next/font/google';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],

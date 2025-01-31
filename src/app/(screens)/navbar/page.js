@@ -4,7 +4,7 @@ import {Search, ShoppingCart, User, Menu, X} from 'lucide-react';
 import {useRouter} from 'next/navigation';
 import {getCurrentUser, signOut} from 'aws-amplify/auth';
 import Link from 'next/link';
-import {ABeeZee} from '@next/font/google';
+import {ABeeZee} from 'next/font/google';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],

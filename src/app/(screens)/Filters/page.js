@@ -7,7 +7,7 @@ import {FaCheck} from 'react-icons/fa';
 const Filters = ({
   selectedCategory,
   setSelectedCategory,
-  priceRange,
+  priceRange = [0, 100], // Default value to prevent undefined access
   handlePriceChange,
   selectedColor,
   setSelectedColor,
@@ -51,7 +51,8 @@ const Filters = ({
       console.log('Filtered Products Response:', response);
 
       if (response.data && response.data.listProductshopcojawads.items) {
-        setProducts(response.data.listProductshopcojawads.items); // Update filtered products
+        const items = response.data?.listProductshopcojawads?.items || [];
+        setProducts(items);
       } else {
         setProducts([]); // No products found, clear list
       }
@@ -94,7 +95,7 @@ const Filters = ({
             min='0.1'
             max='100'
             step='0.1'
-            value={priceRange[0]}
+            value={priceRange?.[0] ?? 0}
             onChange={handlePriceChange}
             className='w-1/2 mr-2'
           />
@@ -105,14 +106,14 @@ const Filters = ({
             min='0.1'
             max='100'
             step='0.1'
-            value={priceRange[1]}
+            value={priceRange?.[1] ?? 100}
             onChange={handlePriceChange}
             className='w-1/2'
           />
         </div>
         <div className='flex justify-between text-sm'>
-          <span>${priceRange[0].toFixed(2)}</span>
-          <span>${priceRange[1].toFixed(2)}</span>
+          <span>${(priceRange?.[0] ?? 0).toFixed(2)}</span>
+          <span>${(priceRange?.[1] ?? 100).toFixed(2)}</span>
         </div>
       </div>
 

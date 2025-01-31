@@ -6,7 +6,7 @@ import Header from './Header/page'; // Import Header Component
 import Footer from './Footer/page';
 import Navbar from './navbar/page';
 import CustomProvider from '../wrapper';
-import {ABeeZee} from '@next/font/google';
+import {ABeeZee} from 'next/font/google';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],

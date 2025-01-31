@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link'; // Import Next.js Link component
-import {ABeeZee} from '@next/font/google';
+import {ABeeZee} from 'next/font/google';
 
 // Load ABeeZee font with vertical trim in mind
 const abeezee = ABeeZee({

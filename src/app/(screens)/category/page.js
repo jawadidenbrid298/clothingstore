@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, Suspense} from 'react';
 import {useCart} from '@/context/cartcontext/page';
 import {FaStar} from 'react-icons/fa';
 import {StorageImage} from '@aws-amplify/ui-react-storage';
@@ -10,7 +10,7 @@ import {listReviewshops} from '../../../graphql/queries'; // Query to list revie
 import {generateClient} from '@aws-amplify/api';
 import CreateReview from '../productreview/page'; // Import the CreateReview component
 import ProtectedRoute from '@/app/Protectedroute';
-import {ABeeZee} from '@next/font/google';
+import {ABeeZee} from 'next/font/google';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -21,7 +21,7 @@ const abeezee = ABeeZee({
   display: 'swap'
 });
 
-const CategoryPage = () => {
+const CategoryPageContent = () => {
   const {addToCart, cartItems, updateCartItemQuantity} = useCart();
   const [selectedSize, setSelectedSize] = useState('Medium');
   const [quantity, setQuantity] = useState(1);
@@ -384,4 +384,11 @@ const CategoryPage = () => {
   );
 };
 
+const CategoryPage = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CategoryPageContent />
+    </Suspense>
+  );
+};
 export default CategoryPage;
