@@ -65,7 +65,7 @@ export default function HeroSection() {
             src='/file.jpg'
             alt='Hero Image'
           />
-          <svg
+          {/* <svg
             className='sm:absolute relative sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
             width='104'
             height='104'
@@ -88,7 +88,7 @@ export default function HeroSection() {
               d='M52 0C53.7654 27.955 76.0448 50.2347 104 52C76.0448 53.7654 53.7654 76.0448 52 104C50.2347 76.0448 27.955 53.7654 0 52C27.955 50.2347 50.2347 27.955 52 0Z'
               fill='black'
             />
-          </svg>
+          </svg> */}
         </div>
       </div>
 
