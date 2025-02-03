@@ -58,6 +58,11 @@
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "totalproducts": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -106,6 +111,22 @@
         {
           "category": "function",
           "resourceName": "topratedproducts"
+        }
+      ]
+    },
+    "AMPLIFY_function_totalproducts_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "totalproducts"
+        }
+      ]
+    },
+    "AMPLIFY_function_totalproducts_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "totalproducts"
         }
       ]
     }

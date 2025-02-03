@@ -5,6 +5,7 @@ import {useRouter} from 'next/navigation';
 import {getCurrentUser, signOut} from 'aws-amplify/auth';
 import Link from 'next/link';
 import {ABeeZee} from 'next/font/google';
+import SearchBar from '@/app/components/searchbar/page';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -96,14 +97,8 @@ const Navbar = () => {
               </button>
             </div>
 
-            <div className='hidden lg:flex ml-[40px] items-center mr-10 px-5 bg-[#F0F0F0] w-full max-w-[588px] h-[48px] rounded-[62px]'>
-              <img src='/svgs/navbar/search.svg' className='w-[20.27px] h-[20.27px]' />
-              <input
-                type='text'
-                placeholder='Search for products...'
-                className='ml-2 outline-none w-[162px] h-[19px] bg-[#F0F0F0]'
-              />
-            </div>
+            {/* Using the new SearchBar component */}
+            <SearchBar />
 
             {!isLoggedIn && (
               <div className='flex space-x-4'>

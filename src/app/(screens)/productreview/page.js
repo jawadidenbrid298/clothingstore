@@ -69,7 +69,7 @@ const CreateReview = ({productID}) => {
       </button>
 
       {isModalOpen && (
-        <div className='fixed inset-0 z-12 bg-gray-600 bg-opacity-50 flex justify-center items-center'>
+        <div className='fixed inset-0 z-20 bg-gray-600 bg-opacity-50 flex justify-center items-center'>
           <div ref={modalRef} className='p-4 max-w-md mx-auto bg-white rounded-lg shadow-md'>
             <h2 className='text-xl font-semibold mb-4'>Create a Review</h2>
             <form onSubmit={handleSubmit}>

@@ -5,7 +5,7 @@ export const sendEmail = /* GraphQL */ `
   mutation SendEmail(
     $name: String!
     $email: String!
-    $phone: String!
+    $phone: String
     $message: String!
   ) {
     sendEmail(name: $name, email: $email, phone: $phone, message: $message) {

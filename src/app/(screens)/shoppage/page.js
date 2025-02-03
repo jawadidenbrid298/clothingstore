@@ -17,29 +17,35 @@ const ProductFilterSection = () => {
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedStyle, setSelectedStyle] = useState('');
   const [ratings, setRatings] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const [nextToken, setNextToken] = useState(null);
   const {setProduct} = useProduct();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const client = generateClient();
-        const result = await client.graphql({
-          query: listProductshopcojawads,
-          variables: {limit: 100}
-        });
-
-        const productData = result.data.listProductshopcojawads.items || [];
-        setProducts(productData);
-        setFilteredProducts(productData);
-
-        fetchAllRatings(productData);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
-
-    fetchProducts();
+    fetchProducts(1); // Start by fetching the first page of data
   }, []);
+
+  const fetchProducts = async (page) => {
+    try {
+      const limit = 9; // Set your desired limit for pagination
+      const client = generateClient();
+
+      const result = await client.graphql({
+        query: listProductshopcojawads,
+        variables: {limit, nextToken: page === 1 ? null : nextToken}
+      });
+
+      const productData = result.data.listProductshopcojawads.items || [];
+      setProducts(productData);
+      setFilteredProducts(productData);
+      setNextToken(result.data.listProductshopcojawads.nextToken);
+
+      // Fetch ratings after products are fetched
+      fetchAllRatings(productData);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
 
   const fetchAllRatings = async (products) => {
     const client = generateClient();
@@ -67,19 +73,14 @@ const ProductFilterSection = () => {
     setRatings(ratingsObj);
   };
 
-  // Handle price range changes
-  const handlePriceChange = (event) => {
-    const newPriceRange = [...priceRange];
-    newPriceRange[event.target.name === 'min' ? 0 : 1] = parseFloat(event.target.value);
-    setPriceRange(newPriceRange);
+  const handlePriceChange = (value) => {
+    setPriceRange(value);
   };
 
-  // Set selected product to context
   const handleProductClick = (product) => {
     setProduct(product);
   };
 
-  // Function to display stars based on rating
   const renderStars = (rating) => {
     const fullStars = Math.floor(rating);
     const halfStar = rating % 1 >= 0.5;
@@ -96,6 +97,11 @@ const ProductFilterSection = () => {
         ))}
       </div>
     );
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchProducts(page); // Fetch data based on the new page
   };
 
   return (
@@ -115,15 +121,15 @@ const ProductFilterSection = () => {
         setProducts={setFilteredProducts}
       />
 
-      <div className='w-full md:w-3/4 '>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 '>
+      <div className='w-full '>
+        <div className='grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
           {filteredProducts.length > 0 ? (
             filteredProducts.map((product) => (
               <div key={product.id} className='card w-full bg-none p-5 rounded-lg sm:items-start items-center'>
                 <Link href={`/category?id=${product.id}`} onClick={() => handleProductClick(product)}>
                   <StorageImage
                     className='w-full h-[298px] object-cover rounded-[20px] mb-4'
-                    imgKey={product.images[0] || 'products/1737718292964_1.png'}
+                    imgKey={product?.images[0] || 'products/1737718292964_1.png'}
                     alt={product.name}
                   />
 
@@ -153,6 +159,23 @@ const ProductFilterSection = () => {
             ))
           ) : (
             <div className='w-full text-center py-10 text-lg text-gray-600'>No products found.</div>
+          )}
+        </div>
+
+        <div className='flex justify-center mt-6'>
+          {nextToken && (
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              className='bg-blue-500 text-white px-4 py-2 rounded-md'>
+              Next
+            </button>
+          )}
+          {currentPage > 1 && (
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              className='bg-blue-500 text-white px-4 py-2 rounded-md ml-4'>
+              Previous
+            </button>
           )}
         </div>
       </div>

@@ -4,7 +4,7 @@ const {DynamoDB} = AWS;
 const dynamodb = new DynamoDB.DocumentClient();
 
 exports.handler = async (event) => {
-  const tableName = process.env.REVIEW_TABLE_NAME || 'Reviewshop-vdikeo5lhffhhfov5vv53exwhy-dev';
+  const tableName = process.env.REVIEW_TABLE_NAME || 'Reviewshop-4qnwpzptcravzi4zmvo2loqlte-dev';
 
   try {
     const params = {

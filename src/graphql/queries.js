@@ -10,6 +10,14 @@ export const Toprated = /* GraphQL */ `
     }
   }
 `;
+export const getTotalProducts = /* GraphQL */ `
+  query GetTotalProducts {
+    getTotalProducts {
+      totalProducts
+      __typename
+    }
+  }
+`;
 export const getUsershopjawad = /* GraphQL */ `
   query GetUsershopjawad($id: ID!) {
     getUsershopjawad(id: $id) {

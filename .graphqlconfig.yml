@@ -1,6 +1,6 @@
 projects:
   shopcojawad1:
-    schemaPath: src/graphql/schema.json
+    schemaPath: amplify/backend/api/shopcojawad1/build/schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:
@@ -10,6 +10,8 @@ projects:
         codeGenTarget: javascript
         generatedFileName: ''
         docsFilePath: src/graphql
+        region: ap-south-1
+        apiId: null
         maxDepth: 4
 extensions:
   amplify:

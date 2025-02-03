@@ -12,7 +12,7 @@ exports.handler = async (event, context) => {
   try {
     await ddb
       .put({
-        TableName: 'Usershopjawad-vdikeo5lhffhhfov5vv53exwhy-dev',
+        TableName: 'Usershopjawad-4qnwpzptcravzi4zmvo2loqlte-dev',
         Item: DBItem
       })
       .promise();

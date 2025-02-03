@@ -12,28 +12,32 @@
       "AmplifyAppId": "d3599we6h5su77"
     },
     "categories": {
-      "api": {
-        "shopcojawad1": {}
-      },
       "auth": {
         "shopcojawad118926806": {}
       },
       "function": {
         "postconfiguration": {
           "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
-          "s3Key": "amplify-builds/postconfiguration-61376a32502b44457239-build.zip"
+          "s3Key": "amplify-builds/postconfiguration-6241774876472f6d564a-build.zip"
         },
         "topratedproducts": {
           "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
-          "s3Key": "amplify-builds/topratedproducts-43355555344d6a7a6e30-build.zip"
+          "s3Key": "amplify-builds/topratedproducts-4a566c456f7831743248-build.zip"
         },
         "jawadses": {
           "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
           "s3Key": "amplify-builds/jawadses-70776e63425437734b2b-build.zip"
+        },
+        "totalproducts": {
+          "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
+          "s3Key": "amplify-builds/totalproducts-356e4c54784d47675534-build.zip"
         }
       },
       "storage": {
         "shopcojawad": {}
+      },
+      "api": {
+        "shopcojawad1": {}
       }
     }
   }
