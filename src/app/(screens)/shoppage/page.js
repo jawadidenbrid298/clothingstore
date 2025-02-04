@@ -24,7 +24,7 @@ const ProductFilterSection = () => {
   const [loading, setLoading] = useState(true);
   const {setProduct} = useProduct();
 
-  const limit = 9;
+  const limit = 12;
 
   useEffect(() => {
     fetchTotalProducts();
@@ -103,7 +103,7 @@ const ProductFilterSection = () => {
   const totalPages = Math.ceil(totalProducts / limit);
 
   return (
-    <div className='flex flex-col md:flex-row gap-10 px-[100px]'>
+    <div className='flex flex-col lg:flex-row sm:pt-[70px] pt-[51px] gap-10 md:px-[50px] lg:px-[50px] px-[20px]'>
       <Filters
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
@@ -124,10 +124,10 @@ const ProductFilterSection = () => {
             <Spin size='large' />
           </div>
         ) : (
-          <div className='grid w-full grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className='grid w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-[10px]'>
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <div key={product.id} className='card w-full bg-none p-5 rounded-lg sm:items-start items-center'>
+                <div key={product.id} className='card w-full bg-none rounded-lg sm:items-start items-center'>
                   <Link href={`/category?id=${product.id}`} onClick={() => setProduct(product)}>
                     <StorageImage
                       className='w-full h-[298px] object-cover rounded-[20px] mb-4'

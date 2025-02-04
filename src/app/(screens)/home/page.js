@@ -1,8 +1,7 @@
 'use client';
 import React from 'react';
-import Link from 'next/link'; 
+import Link from 'next/link';
 import {ABeeZee} from 'next/font/google';
-
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -13,13 +12,13 @@ const abeezee = ABeeZee({
 
 export default function HeroSection() {
   return (
-    <div className={`flex flex-col relative bg-[#F2F0F1] ${abeezee.className}`}>
+    <div className={`flex flex-col bg-[#F2F0F1] ${abeezee.className}`}>
       {/* Hero Section */}
       <div className='flex flex-col sm:flex-row justify-center mx-auto items-start w-full max-h-[663px]'>
         {/* Left Section: Text and Button */}
-        <div className='w-full pt-[199px] sm:pt-[103px] pl-4 sm:pl-[100px]'>
+        <div className='w-full pt-[199px] sm:pt-[103px] md:pl-[100px] pl-4 sm:pl-[100px]'>
           {/* Header Text */}
-          <h1 className='text-black font-normal text-[36px] lg:text-[64px] sm:text-[44px] break-words lg:w-full lg:h-full max-w-[577px] max-h-[173px] sm:w-full sm:h-full leading-[34px] sm:leading-[64px] text-left z-1'>
+          <h1 className='text-black font-normal text-[36px] md:text-[36px]  lg:text-[64px] sm:text-[44px] break-words lg:w-full lg:h-full max-w-[577px] max-h-[173px] sm:w-full sm:h-full leading-[34px] sm:leading-[64px] text-left z-1'>
             FIND CLOTHES THAT MATCHES YOUR STYLE
           </h1>
 
@@ -66,7 +65,7 @@ export default function HeroSection() {
             alt='Hero Image'
           />
           {/* <svg
-            className='absolute  sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
+            className='absolute sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
             width='104'
             height='104'
             viewBox='0 0 104 104'
@@ -92,7 +91,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Brand Logos Section */}
       <div className='bg-black p-10 sm:w-full flex items-center justify-center'>
         <div className='flex w-full flex-wrap justify-center gap-10'>
           <img src='/versace.png' alt='Versace' className='h-12' />
@@ -102,8 +100,6 @@ export default function HeroSection() {
           <img src='/calvinklein.png' alt='Calvin Klein' className='h-12' />
         </div>
       </div>
-
-      {/* New Section Below Shop Button */}
     </div>
   );
 }

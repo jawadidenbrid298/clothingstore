@@ -1,16 +1,16 @@
 'use client';
 import React, {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
-import {listProductshopcojawads} from '../../../graphql/queries'; // Adjust import based on where the query is located
+import {listProductshopcojawads} from '../../../graphql/queries'; 
 import {generateClient} from 'aws-amplify/api';
-import {StorageImage} from '@aws-amplify/ui-react-storage'; // Import StorageImage
+import {StorageImage} from '@aws-amplify/ui-react-storage';
 
 const SearchBar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
-  const client = generateClient(); // Initialize your GraphQL client
+  const client = generateClient(); 
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -24,14 +24,14 @@ const SearchBar = () => {
         return;
       }
 
-      // Fetch all products (can be paginated based on your app needs)
+     
       try {
         const result = await client.graphql({
           query: listProductshopcojawads,
-          variables: {limit: 10} // Adjust limit based on needs
+          variables: {limit: 10} 
         });
 
-        // Filter products based on lowercase comparison
+        
         const filtered = result.data.listProductshopcojawads.items.filter((product) =>
           product.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -45,14 +45,14 @@ const SearchBar = () => {
       }
     };
 
-    const debounceTimeout = setTimeout(fetchFilteredProducts, 300); // Adding debounce to limit API calls
+    const debounceTimeout = setTimeout(fetchFilteredProducts, 300); 
 
-    return () => clearTimeout(debounceTimeout); // Cleanup the timeout
+    return () => clearTimeout(debounceTimeout); t
   }, [searchQuery]);
 
   const handleProductClick = (product) => {
-    router.push(`/category?id=${product.id}`); // Navigate to the category page based on the product's category
-    setIsDropdownOpen(false); // Close the dropdown when a product is clicked
+    router.push(`/category?id=${product.id}`);
+    setIsDropdownOpen(false);
   };
 
   return (

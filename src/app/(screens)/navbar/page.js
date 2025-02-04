@@ -164,7 +164,7 @@ const Navbar = () => {
           {/* Mobile Menu */}
           {isMenuOpen && (
             <div className='top-full left-0 right-0 bg-white border-b z-80'>
-              <div className='flex relative flex-col py-4  bg-white z-1000'>
+              <div className='flex relative flex-col py-4  bg-white '>
                 <Link href='/shoppage' className='px-4 py-2 hover:bg-gray-100'>
                   Shop
                 </Link>
