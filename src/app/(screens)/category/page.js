@@ -13,6 +13,7 @@ import ProtectedRoute from '@/app/Protectedroute';
 import {ABeeZee} from 'next/font/google';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import {Spin} from 'antd';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -158,7 +159,13 @@ const CategoryPageContent = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <Spin size='large' />
+      </div>
+    );
+  }
   if (error || !productDetails) return <div>{error || 'Product not found'}</div>;
 
   return (
@@ -174,7 +181,7 @@ const CategoryPageContent = () => {
               ).map((img, index) => (
                 <StorageImage
                   key={index}
-                  className={`lg:w-[152px] lg:h-[167px] w-[111px] h-[106px] object-cover rounded-[20px] cursor-pointer ${
+                  className={`sm:w-[152px] lg:h-[167px] w-full h-[106px] object-cover rounded-[20px] cursor-pointer ${
                     selectedImage === img ? 'border-[1px] border-black' : ''
                   }`}
                   imgKey={img}
@@ -185,7 +192,7 @@ const CategoryPageContent = () => {
 
             {/* Large Image */}
             <StorageImage
-              className='w-[444px] h-[530px] object-cover bg-transparent border rounded-[20px]'
+              className='w-full h-[530px] object-cover bg-transparent border rounded-[20px]'
               imgKey={selectedImage || productDetails.images[0] || 'default-image.jpg'}
             />
           </div>

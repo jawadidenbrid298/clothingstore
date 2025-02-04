@@ -108,7 +108,7 @@ const Filters = ({
         <div className='mb-6'>
           <h4 className='font-semibold mb-2'>Select by Dress Style</h4>
           <div className='flex flex-col gap-2'>
-            {['Casual', 'Party', 'Formal', 'Gym'].map((style) => (
+            {['Casual', 'Party', 'Formal', 'Gym', 'HOODIE'].map((style) => (
               <div
                 key={style}
                 onClick={() => setSelectedStyle(style)}

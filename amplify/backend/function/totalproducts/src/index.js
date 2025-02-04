@@ -1,26 +1,24 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 
-const TABLE_NAME = 'Productshopcojawad-4qnwpzptcravzi4zmvo2loqlte-dev'; // Ensure this is set in environment variables
+const TABLE_NAME = 'Productshopcojawad-4qnwpzptcravzi4zmvo2loqlte-dev';
 
-exports.handler = async (event) => {
+exports.handler = async () => {
   try {
     const params = {
       TableName: TABLE_NAME,
-      Select: 'COUNT' // Fetch only the count
+      Select: 'COUNT'
     };
 
     const result = await dynamoDB.scan(params).promise();
 
     return {
-      statusCode: 200,
-      body: JSON.stringify({totalProducts: result.Count})
+      totalProducts: result.Count ?? 0
     };
   } catch (error) {
     console.error('Error fetching product count:', error);
     return {
-      statusCode: 500,
-      body: JSON.stringify({error: 'Internal Server Error'})
+      totalProducts: 0
     };
   }
 };

@@ -39,6 +39,9 @@ type ProductRating {
   productID: ID!
   averageRating: Float!
 }
+type ProductCount {
+  totalProducts: Int!
+}
 
 type Query {
   Toprated: [ProductRating] @function(name: "topratedproducts-dev")
@@ -52,8 +55,4 @@ type EmailResponse {
 type Mutation {
   sendEmail(name: String!, email: String!, phone: String, message: String!): EmailResponse
     @function(name: "jawadses-dev")
-}
-
-type ProductCount {
-  totalProducts: Int
 }

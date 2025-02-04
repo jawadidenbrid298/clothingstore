@@ -1,7 +1,4 @@
-'use client';
-import React, {useState} from 'react';
-import {useCart} from '@/context/cartcontext/page';
-import {StorageImage} from '@aws-amplify/ui-react-storage'; // Import StorageImage
+'use client'; import React, {useState} from 'react'; import {useCart} from '@/context/cartcontext/page'; import {StorageImage} from '@aws-amplify/ui-react-storage'; // Import StorageImage
 
 const Cart = () => {
   const {cartItems, clearCart, updateCartItemQuantity} = useCart();

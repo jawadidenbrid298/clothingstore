@@ -8,6 +8,7 @@ import {deleteProductshopcojawad} from '@/graphql/mutations';
 import UpdateProductModal from '../updateproduct/page';
 import ProductModal from '@/app/(screens)/productmodal/page';
 import ProtectedRoute from '@/app/Protectedroute';
+import {Spin} from 'antd';
 
 const client = generateClient();
 
@@ -15,7 +16,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [showProductModal, setShowProductModal] = useState(false); // To manage the display of the ProductModal
+  const [showProductModal, setShowProductModal] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,11 +36,10 @@ export default function AdminProducts() {
   }, []);
 
   const handleProductUpdate = (updatedProduct) => {
-    // Update the list of products with the updated product details
     setProducts((prevProducts) =>
       prevProducts.map((product) => (product.id === updatedProduct.id ? updatedProduct : product))
     );
-    setSelectedProduct(null); // Close the modal after update
+    setSelectedProduct(null);
   };
   const deleteProduct = async (productId) => {
     try {
@@ -47,7 +47,7 @@ export default function AdminProducts() {
         query: deleteProductshopcojawad,
         variables: {input: {id: productId}}
       });
-      // Remove the product from the state after successful deletion
+
       setProducts((prevProducts) => prevProducts.filter((product) => product.id !== productId));
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -63,7 +63,11 @@ export default function AdminProducts() {
   };
 
   if (loading) {
-    return <div className='text-center text-lg font-semibold'>Loading...</div>;
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <Spin size='large' />
+      </div>
+    );
   }
 
   return (
@@ -78,7 +82,6 @@ export default function AdminProducts() {
                 {product.category} - {product.style}
               </p>
 
-              {/* Display Small Thumbnails of All Images */}
               <div className='mt-2'>
                 <span className='font-semibold text-gray-800'>Images:</span>
                 <div className='flex flex-wrap mt-2'>
@@ -155,23 +158,20 @@ export default function AdminProducts() {
           ))}
         </div>
 
-        {/* Update Product Modal */}
         {selectedProduct && (
           <UpdateProductModal
             product={selectedProduct}
             onClose={() => setSelectedProduct(null)}
-            onUpdate={handleProductUpdate} // Pass the update function
+            onUpdate={handleProductUpdate}
           />
         )}
 
-        {/* Button to Open ProductModal */}
         <div className='mt-6 flex justify-center items-center'>
           <button onClick={handleOpenProductModal} className='bg-green-600 text-white py-2 px-6 rounded-md'>
             Create Product Modal
           </button>
         </div>
 
-        {/* Product Modal */}
         {showProductModal && <ProductModal onClose={handleCloseProductModal} />}
       </div>
     </ProtectedRoute>

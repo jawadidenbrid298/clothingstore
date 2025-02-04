@@ -5,6 +5,7 @@ import {StorageImage} from '@aws-amplify/ui-react-storage';
 import {listProductshopcojawads, listReviewshops, Toprated} from '../../../graphql/queries';
 import Link from 'next/link';
 import {ABeeZee} from 'next/font/google';
+import {Spin} from 'antd';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -166,7 +167,11 @@ const FeaturedPage = () => {
   }, [ratings]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <Spin size='large' />
+      </div>
+    );
   }
 
   if (error) {
@@ -177,8 +182,8 @@ const FeaturedPage = () => {
     <div className={`bg-[#ffffff] py-8 ${abeezee.className}`}>
       <div className='container mx-auto px-4'>
         <div className='mb-8'>
-          <h2 className='text-[32px] sm:text-[48px] text-gray-800 text-center'>NEW ARRIVALS</h2>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6'>
+          <h2 className='text-[32px] sm:text-[48px] text-gray-800 text-center mt-[73px]'>NEW ARRIVALS</h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-[39px]'>
             {(showAllNewArrivals ? products.newArrivals : products.newArrivals.slice(0, 4)).map((product) => (
               <Link key={product.id} href={`/category?id=${product.id}`}>
                 <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
@@ -232,8 +237,8 @@ const FeaturedPage = () => {
         <div className='border-t-2' style={{borderColor: '#F2F0F1'}}></div>
 
         <div className='mt-8'>
-          <h2 className='sm:text-[48px] text-[32px] text-black text-center'>TOP SELLING</h2>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6'>
+          <h2 className='sm:text-[48px] text-[32px] text-black text-center mt-[65px]'>TOP SELLING</h2>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-[55px]'>
             {(showAllTopSelling ? products.topSelling : products.topSelling.slice(0, 4)).map((product) => (
               <Link key={product.id} href={`/category?id=${product.id}`}>
                 <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto text-left p-4 rounded-md cursor-pointer'>

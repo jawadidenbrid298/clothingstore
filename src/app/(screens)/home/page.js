@@ -1,9 +1,9 @@
 'use client';
 import React from 'react';
-import Link from 'next/link'; // Import Next.js Link component
+import Link from 'next/link'; 
 import {ABeeZee} from 'next/font/google';
 
-// Load ABeeZee font with vertical trim in mind
+
 const abeezee = ABeeZee({
   subsets: ['latin'],
   weight: ['400'],
@@ -13,7 +13,7 @@ const abeezee = ABeeZee({
 
 export default function HeroSection() {
   return (
-    <div className={`flex flex-col bg-[#F2F0F1] ${abeezee.className}`}>
+    <div className={`flex flex-col relative bg-[#F2F0F1] ${abeezee.className}`}>
       {/* Hero Section */}
       <div className='flex flex-col sm:flex-row justify-center mx-auto items-start w-full max-h-[663px]'>
         {/* Left Section: Text and Button */}
@@ -59,14 +59,14 @@ export default function HeroSection() {
         </div>
 
         {/* Right Section: Image */}
-        <div className='w-full flex justify-center'>
+        <div className='w-full flex justify-center '>
           <img
             className='max-w-[390px] max-h-[448px] sm:max-w-[577px] sm:max-h-[750px] object-cover object-top'
             src='/file.jpg'
             alt='Hero Image'
           />
           {/* <svg
-            className='sm:absolute relative sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
+            className='absolute  sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
             width='104'
             height='104'
             viewBox='0 0 104 104'

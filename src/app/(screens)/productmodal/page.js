@@ -10,11 +10,12 @@ import ProtectedRoute from '@/app/Protectedroute'; // Adjust the import path bas
 const ProductModal = () => {
   const [productData, setProductData] = useState({
     category: '',
+    style: '',
     name: '',
     price: '',
-    newPrice: '',
+    newPrice: '0',
     sizes: '',
-    discount: '',
+    discount: '0',
     colors: '',
     description: '',
     images: []
@@ -102,6 +103,8 @@ const ProductModal = () => {
     const newProduct = {
       name: productData.name,
       category: productData.category,
+      style: productData.style,
+      price: parseFloat(productData.price), // Store only original price
       newPrice: parseFloat(newPrice), // Store only newPrice
       discount: discount,
       sizes: productData.sizes.split(',').map((size) => size.trim()),
@@ -175,6 +178,22 @@ const ProductModal = () => {
                   <option value='Party'>Party</option>
                   <option value='Gym'>Gym</option>
                 </select>
+              </div>
+
+              <div className='mb-4'>
+                <label htmlFor='style' className='block text-sm font-medium text-gray-700'>
+                  Style
+                </label>
+                <input
+                  type='text'
+                  id='style'
+                  name='style'
+                  value={productData.style}
+                  onChange={handleChange}
+                  className='w-full mt-1 p-2 border rounded-md'
+                  placeholder='Enter style (e.g., TSHIRT, HOODIE, JEANS)'
+                  required
+                />
               </div>
 
               <div className='mb-4'>
