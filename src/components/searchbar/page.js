@@ -1,7 +1,7 @@
 'use client';
 import React, {useState, useEffect} from 'react';
 import {useRouter} from 'next/navigation';
-import {listProductshopcojawads} from '../../../graphql/queries'; 
+import {listProductshopcojawads} from '../../graphql/queries';
 import {generateClient} from 'aws-amplify/api';
 import {StorageImage} from '@aws-amplify/ui-react-storage';
 
@@ -10,7 +10,7 @@ const SearchBar = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const router = useRouter();
-  const client = generateClient(); 
+  const client = generateClient();
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -24,14 +24,12 @@ const SearchBar = () => {
         return;
       }
 
-     
       try {
         const result = await client.graphql({
           query: listProductshopcojawads,
-          variables: {limit: 10} 
+          variables: {limit: 100}
         });
 
-        
         const filtered = result.data.listProductshopcojawads.items.filter((product) =>
           product.name.toLowerCase().includes(searchQuery.toLowerCase())
         );
@@ -45,9 +43,10 @@ const SearchBar = () => {
       }
     };
 
-    const debounceTimeout = setTimeout(fetchFilteredProducts, 300); 
+    const debounceTimeout = setTimeout(fetchFilteredProducts, 300);
 
-    return () => clearTimeout(debounceTimeout); t
+    return () => clearTimeout(debounceTimeout);
+    t;
   }, [searchQuery]);
 
   const handleProductClick = (product) => {
@@ -63,7 +62,7 @@ const SearchBar = () => {
         value={searchQuery}
         onChange={handleSearchChange}
         placeholder='Search for products...'
-        className='ml-2 outline-none w-[162px] h-[19px] bg-[#F0F0F0]'
+        className='ml-2 outline-none z-20 w-[590px] h-[19px] bg-[#F0F0F0]'
       />
 
       {isDropdownOpen && filteredProducts.length > 0 && (

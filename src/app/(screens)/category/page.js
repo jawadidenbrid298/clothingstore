@@ -8,7 +8,7 @@ import {useSearchParams} from 'next/navigation';
 import {getProductshopcojawad} from '../../../graphql/queries';
 import {listReviewshops} from '../../../graphql/queries'; // Query to list reviews
 import {generateClient} from '@aws-amplify/api';
-import CreateReview from '../productreview/page'; // Import the CreateReview component
+import CreateReview from '../productreview/page'; 
 import ProtectedRoute from '@/app/Protectedroute';
 import {ABeeZee} from 'next/font/google';
 import Skeleton from 'react-loading-skeleton';
@@ -192,7 +192,7 @@ const CategoryPageContent = () => {
 
             {/* Large Image */}
             <StorageImage
-              className='w-full h-[530px] object-cover bg-transparent border rounded-[20px]'
+              className='w-full h-[530px] max-w-[444px] object-cover bg-transparent border rounded-[20px]'
               imgKey={selectedImage || productDetails.images[0] || 'default-image.jpg'}
             />
           </div>
@@ -362,13 +362,13 @@ const CategoryPageContent = () => {
         )}
         {activeSection === 'reviews' && (
           <div className='mt-12 pt-[24px]'>
-            <h3 className='text-2xl font-semibold mb-4'>Customer Reviews</h3>
+            <h3 className='text-2xl font-semibold mb-4 px-[16px] sm:px-[100px]'>Customer Reviews</h3>
             {loading ? (
               <p>Loading reviews...</p>
             ) : error ? (
               <p>{error}</p>
             ) : reviews.length > 0 ? (
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 px-[16px] sm:px-[100px] gap-6'>
                 {reviews.map((review, index) => (
                   <div key={index} className='border p-6 rounded-lg'>
                     <div className='stars text-yellow-400 mb-2'>

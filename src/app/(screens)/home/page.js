@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {ABeeZee} from 'next/font/google';
+// import DefaultSvg from './DefaultSvg';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -14,11 +15,11 @@ export default function HeroSection() {
   return (
     <div className={`flex flex-col bg-[#F2F0F1] ${abeezee.className}`}>
       {/* Hero Section */}
-      <div className='flex flex-col sm:flex-row justify-center mx-auto items-start w-full max-h-[663px]'>
+      <div className='flex flex-col lg:flex-row justify-center mx-auto items-start w-full lg:h-full'>
         {/* Left Section: Text and Button */}
-        <div className='w-full pt-[199px] sm:pt-[103px] md:pl-[100px] pl-4 sm:pl-[100px]'>
+        <div className='w-full px-[16px]  py-10 lg:px-[103px] md:py-[60px] md:px-[30px] '>
           {/* Header Text */}
-          <h1 className='text-black font-normal text-[36px] md:text-[36px]  lg:text-[64px] sm:text-[44px] break-words lg:w-full lg:h-full max-w-[577px] max-h-[173px] sm:w-full sm:h-full leading-[34px] sm:leading-[64px] text-left z-1'>
+          <h1 className='text-black font-normal text-[36px] md:text-[64px]  lg:text-[64px] sm:text-[64px] break-words lg:w-full lg:h-full max-w-[577px] max-h-[173px] sm:w-full sm:h-full leading-[34px] sm:leading-[64px] text-left z-1'>
             FIND CLOTHES THAT MATCHES YOUR STYLE
           </h1>
 
@@ -31,7 +32,7 @@ export default function HeroSection() {
           {/* Shop Now Button */}
           <div>
             <Link className='w-full' href='/shoppage'>
-              <button className='bg-black text-white font-normal rounded-[500px] flex justify-center items-center w-[358px] h-[52px] mt-[24px] sm:w-[210px] sm:h-[52px] sm:mt-[10px]'>
+              <button className='bg-black text-white font-normal rounded-[500px] flex justify-center items-center w-full h-[52px] mt-[24px] sm:w-[210px] sm:h-[52px] sm:mt-[10px]'>
                 <p>Shop Now</p>
               </button>
             </Link>
@@ -57,17 +58,16 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Right Section: Image */}
-        <div className='w-full flex justify-center '>
+        <div className='w-full flex justify-center content-center relative'>
           <img
-            className='max-w-[390px] max-h-[448px] sm:max-w-[577px] sm:max-h-[750px] object-cover object-top'
-            src='/file.jpg'
+            className='relative max-w-[490px] max-h-[400px] sm:max-w-[577px] sm:max-h-[650px] object-cover object-top justify-center items-center'
+            src='/file2.jpeg'
             alt='Hero Image'
           />
-          {/* <svg
-            className='absolute sm:right-40 right-0  sm:top-1/4 mt-10 transform -translate-y-1/2  object-cover object-top'
-            width='104'
-            height='104'
+          {/* <DefaultSvg/> */}
+
+          <svg
+            className=' absolute 2xl:left-[100px] md:right-[700px] lg:left-[60px] left-[27px] lg:mt-[393px] mt-[137px] transform -translate-y-1/2 lg:w-[56px] lg:h-[56px] w-[44px] h-[44px] '
             viewBox='0 0 104 104'
             fill='none'
             xmlns='http://www.w3.org/2000/svg'>
@@ -76,10 +76,9 @@ export default function HeroSection() {
               fill='black'
             />
           </svg>
+
           <svg
-            className='absolute right-[800px] top-3/4 transform -translate-y-1/2 '
-            width='104'
-            height='104'
+            className='absolute lg:right-20 right-4 lg:h-[106px] lg:w-[106px] h-[76px] w-[76px] mt-[40px] lg:mt-[182px] transform -translate-y-1/2  object-cover object-top'
             viewBox='0 0 104 104'
             fill='none'
             xmlns='http://www.w3.org/2000/svg'>
@@ -87,17 +86,17 @@ export default function HeroSection() {
               d='M52 0C53.7654 27.955 76.0448 50.2347 104 52C76.0448 53.7654 53.7654 76.0448 52 104C50.2347 76.0448 27.955 53.7654 0 52C27.955 50.2347 50.2347 27.955 52 0Z'
               fill='black'
             />
-          </svg> */}
+          </svg>
         </div>
       </div>
 
       <div className='bg-black p-10 sm:w-full flex items-center justify-center'>
-        <div className='flex w-full flex-wrap justify-center gap-10'>
-          <img src='/versace.png' alt='Versace' className='h-12' />
-          <img src='/zara.png' alt='Zara' className='h-12' />
-          <img src='/gucci.png' alt='Gucci' className='h-12' />
-          <img src='/prada.png' alt='Prada' className='h-12' />
-          <img src='/calvinklein.png' alt='Calvin Klein' className='h-12' />
+        <div className='flex w-full flex-wrap lg:justify-between md:justify-center justify-center gap-5'>
+          <img src='/versace.png' alt='Versace' className='sm:h-12 h-[23px]' />
+          <img src='/zara.png' alt='Zara' className='sm:h-12 h-[23px]' />
+          <img src='/gucci.png' alt='Gucci' className='sm:h-12 h-[23px]' />
+          <img src='/prada.png' alt='Prada' className='sm:h-12 h-[23px]' />
+          <img src='/calvinklein.png' alt='Calvin Klein' className='sm:h-12 h-[23px]' />
         </div>
       </div>
     </div>

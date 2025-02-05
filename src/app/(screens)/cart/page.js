@@ -1,4 +1,7 @@
-'use client'; import React, {useState} from 'react'; import {useCart} from '@/context/cartcontext/page'; import {StorageImage} from '@aws-amplify/ui-react-storage'; // Import StorageImage
+'use client';
+import React, {useState} from 'react';
+import {useCart} from '@/context/cartcontext/page';
+import {StorageImage} from '@aws-amplify/ui-react-storage'; // Import StorageImage
 
 const Cart = () => {
   const {cartItems, clearCart, updateCartItemQuantity} = useCart();
@@ -122,9 +125,7 @@ const Cart = () => {
         </div>
 
         {/* Checkout Button */}
-        <button
-          onClick={handleCheckout}
-          className='w-full mt-6 py-3 px-6 bg-black text-white text-lg rounded-[62px] flex items-center justify-center'>
+        <button onClick={handleCheckout} className='w-full mt-4 py-2 px-6 bg-black text-white rounded-[62px]'>
           Go to Checkout →
         </button>
 

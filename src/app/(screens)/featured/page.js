@@ -183,12 +183,12 @@ const FeaturedPage = () => {
       <div className='container mx-auto px-4'>
         <div className='mb-8'>
           <h2 className='text-[32px] sm:text-[48px] text-gray-800 text-center mt-[73px]'>NEW ARRIVALS</h2>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-[39px]'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-[39px]'>
             {(showAllNewArrivals ? products.newArrivals : products.newArrivals.slice(0, 4)).map((product) => (
               <Link key={product.id} href={`/category?id=${product.id}`}>
                 <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
                   <StorageImage
-                    className='w-full h-[298px] object-cover rounded-[20px] mb-4'
+                    className='w-full min-w-[300px] xl:min-w-[300px] h-[298px] object-cover rounded-[20px] mb-4'
                     imgKey={product.images[0] || 'products/1737718292964_1.png'}
                     alt={product.name}
                   />
@@ -238,12 +238,12 @@ const FeaturedPage = () => {
 
         <div className='mt-8'>
           <h2 className='sm:text-[48px] text-[32px] text-black text-center mt-[65px]'>TOP SELLING</h2>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-[55px]'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-[39px]'>
             {(showAllTopSelling ? products.topSelling : products.topSelling.slice(0, 4)).map((product) => (
               <Link key={product.id} href={`/category?id=${product.id}`}>
                 <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto text-left p-4 rounded-md cursor-pointer'>
                   <StorageImage
-                    className='w-full h-[298px] object-cover rounded-[20px] mb-4'
+                    className='w-full min-w-[300px] xl:min-w-[300px] h-[298px] object-cover rounded-[20px] mb-4'
                     imgKey={product.images && product.images[0] ? product.images[0] : 'placeholder-image.png'}
                     alt={product.name}
                   />

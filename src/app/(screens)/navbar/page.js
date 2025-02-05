@@ -5,7 +5,7 @@ import {useRouter} from 'next/navigation';
 import {getCurrentUser, signOut} from 'aws-amplify/auth';
 import Link from 'next/link';
 import {ABeeZee} from 'next/font/google';
-import SearchBar from '@/app/components/searchbar/page';
+import SearchBar from '@/components/searchbar/page';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
