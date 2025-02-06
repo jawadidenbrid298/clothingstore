@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import Link from 'next/link'; // Import Link from next/link
 import {Facebook, Instagram, Youtube, Twitter, Mail} from 'lucide-react';
-
+import { footerLinks } from './data';
 const Footer = () => {
   const [isClient, setIsClient] = useState(false);
 
@@ -10,32 +10,7 @@ const Footer = () => {
     setIsClient(true); // Set to true after component is mounted on the client
   }, []);
 
-  const footerLinks = {
-    company: [
-      {name: 'About', href: '#'},
-      {name: 'Features', href: '#'},
-      {name: 'Works', href: '#'},
-      {name: 'Career', href: '#'}
-    ],
-    help: [
-      {name: 'Customer Support', href: '/contact'},
-      {name: 'Delivery Details', href: '#'},
-      {name: 'Terms & Conditions', href: '#'},
-      {name: 'Privacy Policy', href: '#'}
-    ],
-    faq: [
-      {name: 'Account', href: '#'},
-      {name: 'Manage Deliveries', href: '#'},
-      {name: 'Orders', href: '#'},
-      {name: 'Payments', href: '#'}
-    ],
-    resources: [
-      {name: 'Free eBooks', href: '#'},
-      {name: 'Development Tutorial', href: '#'},
-      {name: 'How to - Blog', href: '#'},
-      {name: 'Youtube Playlist', href: '#'}
-    ]
-  };
+  
 
   return (
     <div className='flex w-full flex-col mx-auto justify-center flex-1'>

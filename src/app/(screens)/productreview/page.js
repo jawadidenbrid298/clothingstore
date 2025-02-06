@@ -4,7 +4,7 @@ import {generateClient} from 'aws-amplify/api';
 import {createReviewshop} from '../../../graphql/mutations';
 import ProtectedRoute from '@/app/Protectedroute';
 
-const CreateReview = ({productID}) => {
+const CreateReview = ({productID, onReviewSubmit}) => {
   const [name, setName] = useState('');
   const [rating, setRating] = useState(1);
   const [comment, setComment] = useState('');
@@ -12,17 +12,6 @@ const CreateReview = ({productID}) => {
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const modalRef = useRef();
-
-  const handleOutsideClick = (e) => {
-    if (modalRef.current && !modalRef.current.contains(e.target)) {
-      setIsModalOpen(false);
-    }
-  };
-
-  React.useEffect(() => {
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
-  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,10 +37,13 @@ const CreateReview = ({productID}) => {
 
       console.log('Review created:', result.data.createReviewshop);
       alert('Review submitted successfully!');
+
+      onReviewSubmit();
+
       setName('');
       setRating(1);
       setComment('');
-      setIsModalOpen(false); // Close modal after submitting
+      setIsModalOpen(false);
     } catch (err) {
       console.error('Error creating review:', err);
       setError('Failed to submit the review. Please try again.');

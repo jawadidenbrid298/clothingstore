@@ -62,7 +62,7 @@ const SearchBar = () => {
         value={searchQuery}
         onChange={handleSearchChange}
         placeholder='Search for products...'
-        className='ml-2 outline-none z-20 w-[590px] h-[19px] bg-[#F0F0F0]'
+        className='ml-2 outline-none z-20 w-full max-w-[590px] h-[19px] bg-[#F0F0F0]'
       />
 
       {isDropdownOpen && filteredProducts.length > 0 && (

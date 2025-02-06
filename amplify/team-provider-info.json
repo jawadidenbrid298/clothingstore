@@ -31,6 +31,10 @@
         "totalproducts": {
           "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
           "s3Key": "amplify-builds/totalproducts-2f575676555267583254-build.zip"
+        },
+        "topreviews": {
+          "deploymentBucketName": "amplify-shopcojawad1-dev-65423-deployment",
+          "s3Key": "amplify-builds/topreviews-34314c4e313449647630-build.zip"
         }
       },
       "storage": {

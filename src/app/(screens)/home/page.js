@@ -1,23 +1,34 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
-import {ABeeZee} from 'next/font/google';
+
 // import DefaultSvg from './DefaultSvg';
 
-const abeezee = ABeeZee({
-  subsets: ['latin'],
-  weight: ['400'],
-  style: ['normal', 'italic'],
-  display: 'swap'
-});
+const brands = [
+  {src: '/versace.png', alt: 'Versace'},
+  {src: '/zara.png', alt: 'Zara'},
+  {src: '/gucci.png', alt: 'Gucci'},
+  {src: '/prada.png', alt: 'Prada'},
+  {src: '/calvinklein.png', alt: 'Calvin Klein'}
+];
 
+const stats = [
+  {value: '200+', description: 'International Brands', width: 'w-[118px] sm:w-[157px]', height: 'h-[44px] sm:h-[67px]'},
+  {
+    value: '2,000+',
+    description: 'High-Quality Products',
+    width: 'w-[118px] sm:w-[170px]',
+    height: 'h-[44px] sm:h-[67px]'
+  },
+  {value: '30,000+', description: 'Happy Customers', width: 'w-[118px] sm:w-[156px]', height: 'h-[44px] sm:h-[67px]'}
+];
 export default function HeroSection() {
   return (
-    <div className={`flex flex-col bg-[#F2F0F1] ${abeezee.className}`}>
+    <div className={`flex flex-col bg-[#F2F0F1]`}>
       {/* Hero Section */}
-      <div className='flex flex-col lg:flex-row justify-center mx-auto items-start w-full lg:h-full'>
+      <div className='flex flex-col lg:flex-row justify-center mx-auto items-start w-full h-full'>
         {/* Left Section: Text and Button */}
-        <div className='w-full px-[16px]  py-10 lg:px-[103px] md:py-[60px] md:px-[30px] '>
+        <div className=' w-full px-[16px]  py-10 lg:pl-[103px] lg:pr-0 md:py-[60px] md:px-[103px] '>
           {/* Header Text */}
           <h1 className='text-black font-normal text-[36px] md:text-[64px]  lg:text-[64px] sm:text-[64px] break-words lg:w-full lg:h-full max-w-[577px] max-h-[173px] sm:w-full sm:h-full leading-[34px] sm:leading-[64px] text-left z-1'>
             FIND CLOTHES THAT MATCHES YOUR STYLE
@@ -39,21 +50,14 @@ export default function HeroSection() {
           </div>
           <div className='flex flex-col items-start w-full max-w-[611px] h-[67px] justify-between mt-[48px] leading-[22px] '>
             <div className='flex justify-between w-full'>
-              {/* 200+ Section */}
-              <div className='flex flex-col items-center w-[118px] h-[44px] sm:w-[157px] sm:h-[67px]'>
-                <p className='text-[24px] sm:text-[40px] leading:[28.37px] sm:leading:[47.28px] font-bold'>200+</p>
-                <p className='text-sm text-gray-500 pt-[10px] sm:pt-[20px]  leading:[22px]'>International Brands</p>
-              </div>
-              {/* 2,000+ Section */}
-              <div className='flex flex-col items-center w-[118px] h-[44px] sm:w-[170px] sm:h-[67px]'>
-                <p className='text-[24px] sm:text-[40px] leading:[28.37px] sm:leading:[47.28px] font-bold'>2,000+</p>
-                <p className='text-sm text-gray-500 pt-[10px] sm:pt-[20px] leading:[22px]'>High-Quality Products</p>
-              </div>
-              {/* 30,000+ Section */}
-              <div className='flex flex-col items-center  w-[118px] h-[44px] sm:w-[156px] sm:h-[67px]'>
-                <p className='text-[24px] sm:text-[40px] leading:[28.37px] sm:leading:[47.28px] font-bold'>30,000+</p>
-                <p className='text-sm text-gray-500 pt-[10px] sm:pt-[20px] leading:[22px]'>Happy Customers</p>
-              </div>
+              {stats.map((stat, index) => (
+                <div key={index} className={`flex flex-col items-start ${stat.width} ${stat.height}`}>
+                  <p className='text-[24px] sm:text-[40px] leading:[28.37px] sm:leading:[47.28px] font-bold'>
+                    {stat.value}
+                  </p>
+                  <p className='text-sm text-gray-500 pt-[10px] sm:pt-[20px] leading:[22px]'>{stat.description}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -92,11 +96,9 @@ export default function HeroSection() {
 
       <div className='bg-black p-10 sm:w-full flex items-center justify-center'>
         <div className='flex w-full flex-wrap lg:justify-between md:justify-center justify-center gap-5'>
-          <img src='/versace.png' alt='Versace' className='sm:h-12 h-[23px]' />
-          <img src='/zara.png' alt='Zara' className='sm:h-12 h-[23px]' />
-          <img src='/gucci.png' alt='Gucci' className='sm:h-12 h-[23px]' />
-          <img src='/prada.png' alt='Prada' className='sm:h-12 h-[23px]' />
-          <img src='/calvinklein.png' alt='Calvin Klein' className='sm:h-12 h-[23px]' />
+          {brands.map((brand, index) => (
+            <img key={index} src={brand.src} alt={brand.alt} className='sm:h-12 md:h-[30px] h-[23px]' />
+          ))}
         </div>
       </div>
     </div>

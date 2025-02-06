@@ -8,7 +8,7 @@ import {useSearchParams} from 'next/navigation';
 import {getProductshopcojawad} from '../../../graphql/queries';
 import {listReviewshops} from '../../../graphql/queries'; // Query to list reviews
 import {generateClient} from '@aws-amplify/api';
-import CreateReview from '../productreview/page'; 
+import CreateReview from '../productreview/page';
 import ProtectedRoute from '@/app/Protectedroute';
 import {ABeeZee} from 'next/font/google';
 import Skeleton from 'react-loading-skeleton';
@@ -80,7 +80,7 @@ const CategoryPageContent = () => {
           const api = generateClient();
           const response = await api.graphql({
             query: listReviewshops,
-            variables: {filter: {productID: {eq: productId}}} // Fetch reviews for the specific product
+            variables: {filter: {productID: {eq: productId}}}
           });
 
           const reviews = response.data.listReviewshops.items;
@@ -90,15 +90,12 @@ const CategoryPageContent = () => {
           if (reviews.length > 0) {
             const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
             const averageRating = totalRating / reviews.length;
-            console.log('Average Rating:', averageRating);
-            // Optionally set it in state if needed
             setAverageRating(averageRating);
           } else {
-            console.log('No reviews found for this product.');
-            // Optionally reset average rating
             setAverageRating(0);
           }
         } catch (err) {
+          setError('Failed to load reviews');
           console.error('Error fetching reviews:', err);
         }
       }
@@ -213,13 +210,13 @@ const CategoryPageContent = () => {
 
             <div className='flex sm:w-[77px] sm:h-[38px] items-center mb-[14px] sm:mb-[12px]'>
               <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] font-semibold text-gray-800'>
-                ${productDetails.newPrice}
+                ${productDetails.newPrice.toFixed(2)}
               </span>
 
               {productDetails.price > 0 && productDetails.discount > 0 && (
                 <>
                   <span className='sm:text-[32px] text-[24px] sm:leading-[37.82px] leading-[28.37px] text-gray-400 ml-4 line-through'>
-                    ${productDetails.price}
+                    ${productDetails.price.toFixed(2)}
                   </span>
                   <span className='sm:text-[16px] text-[12px] sm:leading-[20px] leading-[16px] px-2 py-1 bg-[pink] text-[#FF3333] font-semibold rounded-[62px] ml-4'>
                     {productDetails.discount}%
@@ -378,6 +375,7 @@ const CategoryPageContent = () => {
                     </div>
                     <h4 className='text-lg font-semibold'>{review.name}</h4>
                     <p>{review.comment}</p>
+                    <p className='text-gray-500'> Posted: {new Date(review.createdAt).toLocaleDateString()}</p>
                   </div>
                 ))}
               </div>

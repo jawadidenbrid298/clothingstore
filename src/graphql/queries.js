@@ -18,6 +18,15 @@ export const getTotalProducts = /* GraphQL */ `
     }
   }
 `;
+export const topReviews = /* GraphQL */ `
+  query TopReviews {
+    topReviews {
+      id
+      rating
+      __typename
+    }
+  }
+`;
 export const getUsershopjawad = /* GraphQL */ `
   query GetUsershopjawad($id: ID!) {
     getUsershopjawad(id: $id) {

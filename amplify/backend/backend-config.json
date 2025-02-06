@@ -59,6 +59,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "topreviews": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "totalproducts": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -111,6 +116,22 @@
         {
           "category": "function",
           "resourceName": "topratedproducts"
+        }
+      ]
+    },
+    "AMPLIFY_function_topreviews_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "topreviews"
+        }
+      ]
+    },
+    "AMPLIFY_function_topreviews_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "topreviews"
         }
       ]
     },

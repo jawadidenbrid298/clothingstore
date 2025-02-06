@@ -42,10 +42,15 @@ type ProductRating {
 type ProductCount {
   totalProducts: Int!
 }
+type TopReview {
+  id: ID!
+  rating: Int!
+}
 
 type Query {
   Toprated: [ProductRating] @function(name: "topratedproducts-dev")
   getTotalProducts: ProductCount @function(name: "totalproducts-dev")
+  topReviews: [TopReview] @function(name: "topreviews-dev")
 }
 
 type EmailResponse {

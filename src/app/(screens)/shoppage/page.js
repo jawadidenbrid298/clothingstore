@@ -150,13 +150,13 @@ const ProductFilterSection = () => {
 
                     <div className='mt-2'>
                       <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>
-                        ${product.newPrice}
+                        ${product.newPrice.toFixed(2)}
                       </span>
 
                       {product.price > 0 && product.discount > 0 && (
                         <>
                           <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
-                            ${product.price}
+                            ${product.price.toFixed(2)}
                           </span>
                           <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-[62px]'>
                             {product.discount}%

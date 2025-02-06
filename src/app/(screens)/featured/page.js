@@ -32,13 +32,14 @@ const FeaturedPage = () => {
           query: listProductshopcojawads,
           variables: {
             filter,
-            limit: 16,
-            nextToken
+            limit: 12,
+
+            nextToken: null
           }
         });
 
         if (response.data && response.data.listProductshopcojawads) {
-          let newProducts = response.data.listProductshopcojawads.items;
+          const newProducts = response.data.listProductshopcojawads.items;
 
           const existingProductIds = new Set(products.newArrivals.map((product) => product.id));
           const uniqueNewProducts = newProducts.filter((product) => !existingProductIds.has(product.id));
@@ -46,23 +47,14 @@ const FeaturedPage = () => {
           if (uniqueNewProducts.length > 0) {
             const sortedNewArrivals = uniqueNewProducts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
-            fetchAllRatings(uniqueNewProducts);
-
             setProducts((prevState) => ({
-              newArrivals: [...prevState.newArrivals, ...sortedNewArrivals],
+              newArrivals: sortedNewArrivals,
               topSelling: [...prevState.topSelling]
             }));
-          }
-
-          if (response.data.listProductshopcojawads.nextToken) {
-            setNextToken(response.data.listProductshopcojawads.nextToken);
-          } else {
-            setNextToken(null);
           }
         } else {
           throw new Error('No data returned from the API');
         }
-
         setLoading(false);
       } catch (error) {
         setError('Error fetching product data');
@@ -71,10 +63,8 @@ const FeaturedPage = () => {
       }
     };
 
-    if (nextToken !== null || !products.newArrivals.length) {
-      fetchProducts();
-    }
-  }, [nextToken, filter, ratings]);
+    fetchProducts();
+  }, [filter, ratings]);
 
   const fetchAllRatings = async (products) => {
     const client = generateClient();
@@ -183,7 +173,7 @@ const FeaturedPage = () => {
       <div className='container mx-auto px-4'>
         <div className='mb-8'>
           <h2 className='text-[32px] sm:text-[48px] text-gray-800 text-center mt-[73px]'>NEW ARRIVALS</h2>
-          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-[39px]'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-[39px]'>
             {(showAllNewArrivals ? products.newArrivals : products.newArrivals.slice(0, 4)).map((product) => (
               <Link key={product.id} href={`/category?id=${product.id}`}>
                 <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
@@ -208,7 +198,9 @@ const FeaturedPage = () => {
                     </div>
                   </div>
                   <div className='mt-2'>
-                    <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>${product.newPrice}</span>
+                    <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>
+                      ${product.newPrice.toFixed(2)}
+                    </span>
 
                     {product.price > 0 && product.discount > 0 && (
                       <>
@@ -228,7 +220,7 @@ const FeaturedPage = () => {
           <div className='text-center mt-4'>
             <button
               onClick={() => setShowAllNewArrivals(!showAllNewArrivals)}
-              className='bg-white text-black py-2 px-4 rounded-md'>
+              className='bg-white md:text-[16px] text-[14px] md:leading-[18.91px] leading-[16.55px] text-black md:py-[16.5px] py-[14.5px] md:px-[77.5px] px-[151.5px] border rounded-[62px]'>
               {showAllNewArrivals ? 'Show Less' : 'View All'}
             </button>
           </div>
@@ -283,7 +275,7 @@ const FeaturedPage = () => {
           <div className='text-center mt-4'>
             <button
               onClick={() => setShowAllTopSelling(!showAllTopSelling)}
-              className='bg-white text-black py-2 px-4 rounded-md'>
+              className='bg-white md:text-[16px] text-[14px] md:leading-[18.91px] leading-[16.55px] text-black md:py-[16.5px] py-[14.5px] md:px-[77.5px] px-[151.5px] border rounded-[62px]'>
               {showAllTopSelling ? 'Show Less' : 'View All'}
             </button>
           </div>
