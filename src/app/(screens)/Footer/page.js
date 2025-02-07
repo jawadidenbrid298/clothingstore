@@ -9,9 +9,6 @@ const Footer = () => {
   useEffect(() => {
     setIsClient(true); // Set to true after component is mounted on the client
   }, []);
-
-  
-
   return (
     <div className='flex w-full flex-col mx-auto justify-center flex-1'>
       {/* Newsletter Section */}
@@ -119,7 +116,7 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Bottom Section */}
+          
           <div className='mt-12 pt-8 border-t border-gray-200'>
             <div className='flex flex-col md:flex-row justify-between items-center'>
               <p className='text-sm text-gray-600'>Shop.co © 2000-2023. All Rights Reserved</p>

@@ -6,6 +6,7 @@ import {listProductshopcojawads, listReviewshops, Toprated} from '../../../graph
 import Link from 'next/link';
 import {ABeeZee} from 'next/font/google';
 import {Spin} from 'antd';
+import ShimmerPlaceholder from '../../../../public/purecomponents/shimmerplaceholders';
 
 const abeezee = ABeeZee({
   subsets: ['latin'],
@@ -90,6 +91,14 @@ const FeaturedPage = () => {
 
     setRatings((prevRatings) => ({...prevRatings, ...ratingsObj}));
   };
+  useEffect(() => {
+    if (products.newArrivals.length > 0) {
+      fetchAllRatings(products.newArrivals);
+    }
+    if (products.topSelling.length > 0) {
+      fetchAllRatings(products.topSelling);
+    }
+  }, [products.newArrivals, products.topSelling]);
 
   const fetchTopRatedProducts = async () => {
     const client = generateClient();
@@ -156,14 +165,6 @@ const FeaturedPage = () => {
     fetchTopRatedProducts();
   }, [ratings]);
 
-  if (loading) {
-    return (
-      <div className='flex justify-center items-center h-screen'>
-        <Spin size='large' />
-      </div>
-    );
-  }
-
   if (error) {
     return <div>{error}</div>;
   }
@@ -174,48 +175,52 @@ const FeaturedPage = () => {
         <div className='mb-8'>
           <h2 className='text-[32px] sm:text-[48px] text-gray-800 text-center mt-[73px]'>NEW ARRIVALS</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-[39px]'>
-            {(showAllNewArrivals ? products.newArrivals : products.newArrivals.slice(0, 4)).map((product) => (
-              <Link key={product.id} href={`/category?id=${product.id}`}>
-                <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
-                  <StorageImage
-                    className='w-full min-w-[300px] xl:min-w-[300px] h-[298px] object-cover rounded-[20px] mb-4'
-                    imgKey={product.images[0] || 'products/1737718292964_1.png'}
-                    alt={product.name}
-                  />
-                  <h3 className='text-lg font-medium text-gray-800'>{product.name}</h3>
-                  <div className='flex items-center mt-2'>
-                    <div className='flex items-center mt-2'>
-                      {Array.from({length: 5}, (_, index) => (
-                        <span
-                          key={index}
-                          className={
-                            index < Math.floor(ratings[product.id] || 0) ? 'text-yellow-500' : 'text-gray-300'
-                          }>
-                          ★
+            {loading
+              ? Array.from({length: 4}).map((_, index) => <ShimmerPlaceholder key={index} />)
+              : (showAllNewArrivals ? products.newArrivals : products.newArrivals.slice(0, 4)).map((product) => (
+                  <Link key={product.id} href={`/category?id=${product.id}`}>
+                    <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto p-4 rounded-md cursor-pointer'>
+                      <StorageImage
+                        className='w-full min-w-[300px] xl:min-w-[300px] h-[298px] object-cover rounded-[20px] mb-4'
+                        imgKey={product.images[0] || 'products/1737718292964_1.png'}
+                        alt={product.name}
+                      />
+                      <h3 className='text-lg font-medium text-gray-800'>{product.name}</h3>
+                      <div className='flex items-center mt-2'>
+                        <div className='flex items-center mt-2'>
+                          {Array.from({length: 5}, (_, index) => (
+                            <span
+                              key={index}
+                              className={
+                                index < Math.floor(ratings[product.id] || 0) ? 'text-yellow-500' : 'text-gray-300'
+                              }>
+                              ★
+                            </span>
+                          ))}
+                          <span className='text-gray-500 ml-2'>
+                            ({ratings[product.id]?.toFixed(1) || 'No ratings'})
+                          </span>
+                        </div>
+                      </div>
+                      <div className='mt-2'>
+                        <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>
+                          ${product.newPrice.toFixed(2)}
                         </span>
-                      ))}
-                      <span className='text-gray-500 ml-2'>({ratings[product.id]?.toFixed(1) || 'No ratings'})</span>
-                    </div>
-                  </div>
-                  <div className='mt-2'>
-                    <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>
-                      ${product.newPrice.toFixed(2)}
-                    </span>
 
-                    {product.price > 0 && product.discount > 0 && (
-                      <>
-                        <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
-                          ${product.price}
-                        </span>
-                        <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-full'>
-                          {product.discount}%
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            ))}
+                        {product.price > 0 && product.discount > 0 && (
+                          <>
+                            <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
+                              ${product.price}
+                            </span>
+                            <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-full'>
+                              {product.discount}%
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
           </div>
           <div className='text-center mt-4'>
             <button
@@ -231,46 +236,52 @@ const FeaturedPage = () => {
         <div className='mt-8'>
           <h2 className='sm:text-[48px] text-[32px] text-black text-center mt-[65px]'>TOP SELLING</h2>
           <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-[39px]'>
-            {(showAllTopSelling ? products.topSelling : products.topSelling.slice(0, 4)).map((product) => (
-              <Link key={product.id} href={`/category?id=${product.id}`}>
-                <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto text-left p-4 rounded-md cursor-pointer'>
-                  <StorageImage
-                    className='w-full min-w-[300px] xl:min-w-[300px] h-[298px] object-cover rounded-[20px] mb-4'
-                    imgKey={product.images && product.images[0] ? product.images[0] : 'placeholder-image.png'}
-                    alt={product.name}
-                  />
-                  <h3 className='text-[16px] sm:text-[20px] font-medium text-black'>{product.name}</h3>
-                  <div className='flex items-center mt-2 gap-[5.31px]'>
-                    <div className='flex items-center mt-2'>
-                      {Array.from({length: 5}, (_, index) => (
-                        <span
-                          key={index}
-                          className={
-                            index < Math.floor(ratings[product.id] || 0) ? 'text-yellow-500' : 'text-gray-300'
-                          }>
-                          ★
+            {loading
+              ? Array.from({length: 4}).map((_, index) => <ShimmerPlaceholder key={index} />)
+              : (showAllTopSelling ? products.topSelling : products.topSelling.slice(0, 4)).map((product) => (
+                  <Link key={product.id} href={`/category?id=${product.id}`}>
+                    <div className='bg-white flex flex-col items-center sm:items-start justify-center mx-auto text-left p-4 rounded-md cursor-pointer'>
+                      <StorageImage
+                        className='w-full min-w-[300px] xl:min-w-[300px] h-[298px] object-cover rounded-[20px] mb-4'
+                        imgKey={product.images && product.images[0] ? product.images[0] : 'placeholder-image.png'}
+                        alt={product.name}
+                      />
+                      <h3 className='text-[16px] sm:text-[20px] font-medium text-black'>{product.name}</h3>
+                      <div className='flex items-center mt-2 gap-[5.31px]'>
+                        <div className='flex items-center mt-2'>
+                          {Array.from({length: 5}, (_, index) => (
+                            <span
+                              key={index}
+                              className={
+                                index < Math.floor(ratings[product.id] || 0) ? 'text-yellow-500' : 'text-gray-300'
+                              }>
+                              ★
+                            </span>
+                          ))}
+                          <span className='text-gray-500 ml-2'>
+                            ({ratings[product.id]?.toFixed(1) || 'No ratings'})
+                          </span>
+                        </div>
+                      </div>
+                      <div className='mt-2'>
+                        <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>
+                          ${product.newPrice}
                         </span>
-                      ))}
-                      <span className='text-gray-500 ml-2'>({ratings[product.id]?.toFixed(1) || 'No ratings'})</span>
-                    </div>
-                  </div>
-                  <div className='mt-2'>
-                    <span className='sm:text-[24px] text-[20px] font-semibold text-gray-800'>${product.newPrice}</span>
 
-                    {product.price > 0 && product.discount > 0 && (
-                      <>
-                        <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
-                          ${product.price}
-                        </span>
-                        <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-[62px]'>
-                          {product.discount}%
-                        </span>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </Link>
-            ))}
+                        {product.price > 0 && product.discount > 0 && (
+                          <>
+                            <span className='text-gray-400 sm:text-[24px] text-[20px] pl-[10px] line-through mr-2'>
+                              ${product.price}
+                            </span>
+                            <span className='px-2 py-1 bg-[pink] text-[#FF3333] text-[12px] font-semibold rounded-[62px]'>
+                              {product.discount}%
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                ))}
           </div>
           <div className='text-center mt-4'>
             <button

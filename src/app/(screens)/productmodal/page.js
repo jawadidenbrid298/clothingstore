@@ -1,11 +1,13 @@
 'use client';
-
 import React, {useState} from 'react';
 import {generateClient} from 'aws-amplify/api';
 import {uploadData} from 'aws-amplify/storage';
 import {createProductshopcojawad} from '../../../graphql/mutations';
 import SignOutButton from '@/app/auth/signout/page';
-import ProtectedRoute from '@/app/Protectedroute'; // Adjust the import path based on your project structure
+import ProtectedRoute from '@/app/Protectedroute';
+import InputField from '../../../../public/purecomponents/Inputfield'; // Adjust the path
+import TextAreaField from '../../../../public/purecomponents/Textarea';
+import {formFields} from './configurationform'; // Adjust the path
 
 const ProductModal = () => {
   const [productData, setProductData] = useState({
@@ -25,7 +27,6 @@ const ProductModal = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [modalVisible, setModalVisible] = useState(true);
 
-  // Handle input changes
   const handleChange = (e) => {
     const {name, value} = e.target;
     const newData = {...productData, [name]: value};
@@ -41,7 +42,6 @@ const ProductModal = () => {
     setProductData(newData);
   };
 
-  // Handle file selection
   const handleImageUpload = (e) => {
     const files = Array.from(e.target.files);
 
@@ -85,12 +85,11 @@ const ProductModal = () => {
     return uploadedKeys;
   };
   const calculateNewPrice = (price, percentage) => {
-    if (!percentage) return price; // If no percentage, return the original price
+    if (!percentage) return price;
     const discount = (price * percentage) / 100;
     return price - discount;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -99,23 +98,18 @@ const ProductModal = () => {
 
     const uploadedImageKeys = await uploadImages(productData.images);
 
-    // Create product object
     const newProduct = {
       name: productData.name,
       category: productData.category,
       style: productData.style,
-      price: parseFloat(productData.price), // Store only original price
-      newPrice: parseFloat(newPrice), // Store only newPrice
+      price: parseFloat(productData.price),
+      newPrice: parseFloat(newPrice),
       discount: discount,
       sizes: productData.sizes.split(',').map((size) => size.trim()),
       colors: productData.colors.split(',').map((color) => color.trim()),
       description: productData.description,
       images: uploadedImageKeys
     };
-
-    if (discount > 0) {
-      newProduct.price = parseFloat(productData.price);
-    }
 
     try {
       const client = generateClient();
@@ -146,10 +140,9 @@ const ProductModal = () => {
     }
   };
 
-  // Close the modal when clicked outside
   const handleClose = (e) => {
     if (e.target === e.currentTarget) {
-      setModalVisible(false); // Close the modal
+      setModalVisible(false);
     }
   };
 
@@ -160,149 +153,48 @@ const ProductModal = () => {
           <div className='bg-white p-6 rounded-lg shadow-lg w-full max-w-md'>
             <h2 className='text-2xl font-bold mb-4'>Add New Product</h2>
             <form onSubmit={handleSubmit}>
-              {/* Category */}
-              <div className='mb-4'>
-                <label htmlFor='category' className='block text-sm font-medium text-gray-700'>
-                  Category
-                </label>
-                <select
-                  id='category'
-                  name='category'
-                  value={productData.category}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  required>
-                  <option value=''>Select a category</option>
-                  <option value='Casual'>Casual</option>
-                  <option value='Formal'>Formal</option>
-                  <option value='Party'>Party</option>
-                  <option value='Gym'>Gym</option>
-                </select>
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='style' className='block text-sm font-medium text-gray-700'>
-                  Style
-                </label>
-                <input
-                  type='text'
-                  id='style'
-                  name='style'
-                  value={productData.style}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  placeholder='Enter style (e.g., TSHIRT, HOODIE, JEANS)'
-                  required
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='name' className='block text-sm font-medium text-gray-700'>
-                  Product Name
-                </label>
-                <input
-                  type='text'
-                  id='name'
-                  name='name'
-                  value={productData.name}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  required
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='price' className='block text-sm font-medium text-gray-700'>
-                  Price ($)
-                </label>
-                <input
-                  type='number'
-                  id='price'
-                  name='price'
-                  value={productData.price}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  required
-                />
-              </div>
-              <div className='mb-4'>
-                <label htmlFor='discountPercentage' className='block text-sm font-medium text-gray-700'>
-                  Discount Percentage
-                </label>
-                <input
-                  type='number'
-                  id='discount'
-                  name='discountPercentage'
-                  value={productData.discountPercentage || ''}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  placeholder='e.g., 50'
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='newPrice' className='block text-sm font-medium text-gray-700'>
-                  New Price (calculated)
-                </label>
-                <input
-                  type='number'
-                  id='newPrice'
-                  name='newPrice'
-                  value={productData.newPrice}
-                  readOnly
-                  className='w-full mt-1 p-2 border rounded-md'
-                  placeholder='e.g., 10'
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='sizes' className='block text-sm font-medium text-gray-700'>
-                  Sizes (comma-separated)
-                </label>
-                <input
-                  type='text'
-                  id='sizes'
-                  name='sizes'
-                  value={productData.sizes}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  placeholder='e.g., Small, Medium, Large'
-                  required
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='colors' className='block text-sm font-medium text-gray-700'>
-                  Colors (comma-separated)
-                </label>
-                <input
-                  type='text'
-                  id='colors'
-                  name='colors'
-                  value={productData.colors}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  placeholder='e.g., Red, Blue, Green'
-                  required
-                />
-              </div>
-
-              <div className='mb-4'>
-                <label htmlFor='description' className='block text-sm font-medium text-gray-700'>
-                  Description
-                </label>
-                <textarea
-                  id='description'
-                  name='description'
-                  value={productData.description}
-                  onChange={handleChange}
-                  className='w-full mt-1 p-2 border rounded-md'
-                  rows='4'
-                  placeholder='Enter product description'
-                  required
-                />
-              </div>
-
+              {formFields.map((field) =>
+                field.type == 'select' ? (
+                  <InputField
+                    className='w-full mt-1 p-2 border rounded-md'
+                    key={field.id}
+                    label={field.label}
+                    id={field.id}
+                    name={field.name}
+                    value={productData[field.name]}
+                    onChange={handleChange}
+                    type={field.type}
+                    options={field.options}
+                    required={field.required}
+                  />
+                ) : field.type === 'textarea' ? (
+                  <TextAreaField
+                    className='w-full mt-1 p-2 border rounded-md'
+                    key={field.id}
+                    label={field.label}
+                    id={field.id}
+                    name={field.name}
+                    value={productData[field.name]}
+                    onChange={handleChange}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                  />
+                ) : (
+                  <InputField
+                    className='w-full mt-1 p-2 border rounded-md'
+                    key={field.id}
+                    label={field.label}
+                    id={field.id}
+                    name={field.name}
+                    value={productData[field.name]}
+                    onChange={handleChange}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                    readOnly={field.readOnly}
+                  />
+                )
+              )}
               <div className='mb-4'>
                 <label htmlFor='images' className='block text-sm font-medium text-gray-700'>
                   Upload Images (max 4)
@@ -329,7 +221,6 @@ const ProductModal = () => {
                   </div>
                 )}
               </div>
-
               {uploadProgress > 0 && (
                 <div className='mb-4'>
                   <p className='text-sm text-gray-700'>Upload Progress: {uploadProgress}%</p>
@@ -342,7 +233,6 @@ const ProductModal = () => {
                 </button>
               </div>
             </form>
-
             <div className='mt-4'>
               <SignOutButton />
             </div>

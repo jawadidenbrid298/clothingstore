@@ -3,29 +3,8 @@ import React, {useState, useEffect} from 'react';
 import {Menu, X} from 'lucide-react';
 import {getCurrentUser, signOut} from 'aws-amplify/auth';
 import Link from 'next/link';
-import {ABeeZee} from 'next/font/google';
+import {NAV_LINKS, USER_DROPDOWN} from './data';
 import SearchBar from '@/components/searchbar/page';
-
-const abeezee = ABeeZee({
-  subsets: ['latin'],
-  weight: ['400'],
-  style: ['normal', 'italic'],
-  display: 'swap'
-});
-
-const NAV_LINKS = [
-  {label: 'Shop', path: '/shoppage'},
-  {label: 'OnSale', path: '/'},
-  {label: 'NewArrivals', path: '/featured'},
-  {label: 'Brands', path: '#'},
-  {label: 'AddProduct', path: '/admin/adminpanel', isButton: true}
-];
-
-const USER_DROPDOWN = [
-  {label: 'Account Settings', path: '/profile'},
-  {label: 'Contact Form', path: '/contact'},
-  {label: 'Logout', action: 'logout'}
-];
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -115,12 +94,7 @@ const Navbar = () => {
                 />
                 <div className='flex items-center'>
                   <button className='cursor-pointer' onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
-                    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-                      <path
-                        d='M12 1.875C9.99747 1.875 8.0399 2.46882 6.37486 3.58137C4.70981 4.69392 3.41206 6.27523 2.64572 8.12533C1.87939 9.97543 1.67888 12.0112 2.06955 13.9753C2.46023 15.9393 3.42454 17.7435 4.84055 19.1595C6.25656 20.5755 8.06066 21.5398 10.0247 21.9305C11.9888 22.3211 14.0246 22.1206 15.8747 21.3543C17.7248 20.5879 19.3061 19.2902 20.4186 17.6251C21.5312 15.9601 22.125 14.0025 22.125 12C22.122 9.3156 21.0543 6.74199 19.1562 4.84383C17.258 2.94567 14.6844 1.87798 12 1.875ZM7.45969 18.4284C7.98195 17.7143 8.66528 17.1335 9.45418 16.7331C10.2431 16.3327 11.1153 16.124 12 16.124C12.8847 16.124 13.7569 16.3327 14.5458 16.7331C15.3347 17.1335 16.0181 17.7143 16.5403 18.4284C15.2134 19.3695 13.6268 19.875 12 19.875C10.3732 19.875 8.78665 19.3695 7.45969 18.4284Z'
-                        fill='black'
-                      />
-                    </svg>
+                    <img src='/svgs/navbar/1.svg' />
                   </button>
 
                   {isDropdownOpen && (
