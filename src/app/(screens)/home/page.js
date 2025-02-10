@@ -2,6 +2,7 @@
 import React from 'react';
 import Link from 'next/link';
 import {brands, stats} from './data';
+import Button from '../../../../public/purecomponents/button';
 
 export default function HeroSection() {
   return (
@@ -16,11 +17,11 @@ export default function HeroSection() {
             and cater to your sense of style.
           </p>
           <div>
-            <Link className='w-full' href='/shoppage'>
-              <button className='bg-black text-white font-normal rounded-[500px] flex justify-center items-center w-full h-[52px] mt-[24px] sm:w-[210px] sm:h-[52px] sm:mt-[10px]'>
-                <p>Shop Now</p>
-              </button>
-            </Link>
+            <Button
+              text='Shop Now'
+              href='/shoppage'
+              className='bg-black text-white font-normal rounded-[500px] flex justify-center items-center w-full h-[52px] mt-[24px] sm:w-[210px] sm:h-[52px] sm:mt-[10px]'
+            />
           </div>
           <div className='flex flex-col items-start w-full max-w-[611px] justify-between mt-[48px] leading-[22px]'>
             <div className='flex justify-between w-full'>

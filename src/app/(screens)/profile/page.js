@@ -1,6 +1,7 @@
 'use client';
 import React, {useState, useEffect} from 'react';
 import {updatePassword, updateUserAttributes, sendUserAttributeVerificationCode} from 'aws-amplify/auth';
+import Button from '../../../../public/purecomponents/button';
 
 const Profile = () => {
   const [formData, setFormData] = useState({
@@ -190,12 +191,17 @@ const Profile = () => {
                 />
               </div>
               <div className='flex justify-between items-center'>
-                <button type='button' className='text-gray-600 hover:text-black transition'>
-                  Cancel
-                </button>
-                <button type='submit' className='bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition'>
-                  Save Changes
-                </button>
+                <Button
+                  
+                  text='Cancel'
+                  className='text-gray-600 hover:text-black transition'
+                  onClick={() => console.log('Cancel clicked')}
+                />
+                <Button
+                  text='Save Changes'
+                  className='bg-black text-white px-6 py-3 rounded-md hover:bg-gray-800 transition'
+                  onClick={() => handleUpdatePassword(formData.currentPassword, formData.newPassword)}
+                />
               </div>
             </form>
           </div>

@@ -1,28 +1,28 @@
 'use client';
 import React, {useEffect, useState} from 'react';
-import Link from 'next/link'; // Import Link from next/link
+import Link from 'next/link';
 import {Facebook, Instagram, Youtube, Twitter, Mail} from 'lucide-react';
 import { footerLinks } from './data';
 const Footer = () => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true); // Set to true after component is mounted on the client
+    setIsClient(true); 
   }, []);
   return (
     <div className='flex w-full flex-col mx-auto justify-center flex-1'>
-      {/* Newsletter Section */}
+    
       {isClient && (
         <div className='bg-black rounded-[20px] mb-[-60px] z-10 justify-between items-center text-white mt-20 py-[22px] sm:pl-[80px] pl-[17px] sm:mx-[100px] mx-[17px]'>
           <div className='flex flex-col lg:flex-row justify-none lg:justify-between  w-full '>
-            {/* Grid item for text */}
+            
             <div className='flex justify-center w-full'>
               <h2 className='mb-4 sm:text-[40px] text-[32px] leading-[46px] sm:w-full  font-ABeeZee'>
                 STAY UP TO DATE ABOUT OUR LATEST OFFERS
               </h2>
             </div>
 
-            {/* Grid item for input fields */}
+           
             <div className='flex flex-col gap-4 w-full lg:w-[364px] mr-40 pr-20'>
               <div className='relative'>
                 <Mail className='absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5' />
@@ -41,7 +41,7 @@ const Footer = () => {
         </div>
       )}
 
-      {/* Footer Section */}
+     
       <footer className='bg-[#F0F0F0] pt-16 pb-8 px-4 md:px-8 mt-auto'>
         <div className='mx-auto'>
           {/* Main Footer Content */}

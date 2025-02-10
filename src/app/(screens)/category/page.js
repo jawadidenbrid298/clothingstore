@@ -133,7 +133,6 @@ const CategoryPageContent = () => {
   };
 
   useEffect(() => {
-    // Predefined FAQs
     setFaqs([
       {question: 'What is the return policy?', answer: 'You can return the product within 30 days.'},
       {question: 'How do I track my order?', answer: 'You can track your order via our tracking page.'},

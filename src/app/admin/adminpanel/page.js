@@ -124,7 +124,6 @@ export default function AdminProducts() {
                 Created: {new Date(product.createdAt).toLocaleDateString()}
               </div>
 
-              {/* Update Button */}
               <button
                 onClick={() => setSelectedProduct(product)}
                 className='mt-3 bg-blue-600 text-white py-1 px-4 rounded-md w-full'>
